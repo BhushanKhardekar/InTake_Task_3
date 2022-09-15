@@ -1,0 +1,156 @@
+<div class="container">
+  <div class="pb-2">
+    <h1>Medical Details</h1>
+  </div>
+  <div>
+    <form #medicalForm="ngForm" [formGroup]="applicantMedicalForm" class="row">
+      <!-- General Info -->
+      <div class="row pb-3">
+        <div class="col-4 form-check">
+          <input class="form-check-input" type="checkbox" formControlName="checkApplicant" (change)="onApplicantCheck($event)"
+            [checked]="currentlyChecked === check_box_type.Applicant"
+            (click)="selectCheckBox(check_box_type.Applicant)" />
+          <label class="form-check-label" for="flexCheckDefault">Self Insurance</label>
+        </div>
+
+        <div class="col-4 form-check">
+          <input class="form-check-input" type="checkbox" formControlName="checkSpouse" (change)="onSpouseCheck($event)"
+            [checked]="currentlyChecked === check_box_type.Spouse" (click)="selectCheckBox(check_box_type.Spouse)" />
+          <label class="form-check-label" for="flexCheckDefault">Spouse Insurance</label>
+        </div>
+
+        <div class="col-4 form-check">
+          <input class="form-check-input" type="checkbox" formControlName="checkOthers" (change)="onOtherCheck($event)"
+            [checked]="currentlyChecked === check_box_type.Other" (click)="selectCheckBox(check_box_type.Other)" />
+          <label class="form-check-label" for="flexCheckDefault">Others Insurance</label>
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-6">
+          <label for="FullName" class="form-label">Full Name</label>
+          <input type="text" class="form-control" formControlName="FullName" [attr.disabled]="
+              isApplicantSelected || isSpouseSelected || isOtherSelected
+            " />
+          <span style="color: red" *ngIf="
+              (f.FullName && f.FullName.invalid && f.FullName.touched) ||
+              (f.FullName && f.FullName.invalid && formSubmitted)
+            ">
+            Required</span>
+        </div>
+        <div class="col-6">
+          <label for="Gender" class="form-label">Gender</label>
+          <input type="text" class="form-control" formControlName="Gender" [attr.disabled]="
+              isApplicantSelected || isSpouseSelected || isOtherSelected
+            " />
+          <span style="color: red" *ngIf="
+              (f.Gender && f.Gender.invalid && f.Gender.touched) ||
+              (f.Gender && f.Gender.invalid && formSubmitted)
+            ">
+            Required</span>
+        </div>
+        <div class="col-6">
+          <label for="Gender" class="form-label">DateOfBirth</label>
+          <input type="text" class="form-control" formControlName="DateOfBirth" [attr.disabled]="
+              isApplicantSelected || isSpouseSelected || isOtherSelected
+            " />
+          <span style="color: red" *ngIf="
+              (f.DOB && f.DOB.invalid && f.DOB.touched) ||
+              (f.DOB && f.DOB.invalid && formSubmitted)
+            ">
+            Required</span>
+        </div>
+        <div class="col-6">
+          <label for="Gender" class="form-label">Age</label>
+          <input type="text" class="form-control" formControlName="Age" [attr.disabled]="
+              isApplicantSelected || isSpouseSelected || isOtherSelected
+            " />
+          <span style="color: red" *ngIf="
+              (f.Age && f.Age.invalid && f.Age.touched) ||
+              (f.Age && f.Age.invalid && formSubmitted)
+            ">
+            Required</span>
+        </div>
+      </div>
+      <!-- //General Info -->
+
+      <!-- HealthInfo -->
+      <div class="pb-5">
+        <div class="form-check pt-3">
+          <div class="row">
+            <div class="col-4">
+              <input class="form-check-input" type="checkbox" formControlName="checkSmoke" (change)="onCheck_Smoking($event)" />
+              <label class="form-check-label" for="flexCheckDefault">Smoking</label>
+            </div>
+            <div class="col-8">
+              <div *ngIf="isSmoke">
+                <label class="form-label">Do you smkoke?</label>
+                <input type="text" class="form-control" formControlName="Smoke" />
+                <span style="color: red" *ngIf="
+                    (f.Smoke && f.Smoke.invalid && f.Smoke.touched) ||
+                    (f.Smoke && f.Smoke.invalid && formSubmitted)
+                  ">
+                  Required</span>
+              </div>
+              <div *ngIf="isSmoke">
+                <label class="form-label">Do you have Asthama?</label>
+                <input type="text" class="form-control" formControlName="Asthama" />
+                <span style="color: red" *ngIf="
+                    (f.Asthama && f.Asthama.invalid && f.Asthama.touched) ||
+                    (f.Asthama && f.Asthama.invalid && formSubmitted)
+                  ">
+                  Required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-check pt-3">
+          <div class="row">
+            <div class="col-4">
+              <input class="form-check-input" type="checkbox" formControlName="checkAlcohol" (change)="onCheck_Alcohol($event)" />
+              <label class="form-check-label" for="flexCheckDefault">Alcohol</label>
+            </div>
+            <div class="col-8">
+              <div *ngIf="isAlcohol">
+                <label class="form-label">Do you drink Alcohol?</label>
+                <input type="text" class="form-control" formControlName="Alcohol" />
+                <span style="color: red" *ngIf="
+                    (f.Alcohol && f.Alcohol.invalid && f.Alcohol.touched) ||
+                    (f.Alcohol && f.Alcohol.invalid && formSubmitted)
+                  ">
+                  Required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-check pt-3">
+          <div class="row">
+            <div class="col-4">
+              <input class="form-check-input" formControlName="checkOtherInfo" type="checkbox" (change)="onCheck_OtherInfo($event)" />
+              <label class="form-check-label" for="flexCheckDefault">Other Health Information</label>
+            </div>
+            <div class="col-8">
+              <div *ngIf="isOtherInfo">
+                <label class="form-label">Mention</label>
+                <input type="text" class="form-control" formControlName="OtherInfo" />
+                <span style="color: red" *ngIf="(f.OtherInfo && f.OtherInfo.invalid && f.OtherInfo.touched) ||
+                    (f.OtherInfo && f.OtherInfo.invalid && formSubmitted)
+                  ">
+                  Required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- //HealthInfo -->
+    </form>
+  </div>
+  <div>
+    <div>
+      <!-- <button type="buttton" class="btn btn-outline-success">Back</button> -->
+      <button type="buttton" (click)="medicalFormInfo(medicalForm.value)" class="btn btn-outline-success">
+        Next
+      </button>
+    </div>
+  </div>
+</div>
