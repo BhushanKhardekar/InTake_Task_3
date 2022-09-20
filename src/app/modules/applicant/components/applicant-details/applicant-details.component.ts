@@ -24,7 +24,7 @@ export class ApplicantDetailsComponent implements OnInit {
   maxDate: any;
   countryCode: any;
   applicantGender: any;
-  maaraige: any;
+  marriage: any;
 
   currentApplicantAge = false;
   currentSpouseAge = false;
@@ -34,6 +34,7 @@ export class ApplicantDetailsComponent implements OnInit {
   formSubmitted = false;
   invalidApplicantAge = false;
   invalidSpouseAge = false;
+  checkBoxGroup=false;
 
   //Arrays
   countries = {
@@ -83,7 +84,7 @@ export class ApplicantDetailsComponent implements OnInit {
       Gender: [this._userService.applicant.applicantDetails.Gender, Validators.required],
       DateOfBirth: [this._userService.applicant.applicantDetails.DateOfBirth,Validators.required],
       Age: [this._userService.applicant.applicantDetails.Age, Validators.required],
-      MaritalStatus: [this._userService.applicant.applicantDetails.MaritalStatus, Validators.required],
+      MaritalStatus: [this._userService.applicant.applicantDetails.MaritalStatus],
       SpouseFullName: [this._userService.applicant.applicantDetails.SpouseFullName],
       SpouseGender: [this._userService.applicant.applicantDetails.SpouseGender],
       SpouseDateOfBirth: [this._userService.applicant.applicantDetails.SpouseDateOfBirth],
@@ -98,12 +99,12 @@ export class ApplicantDetailsComponent implements OnInit {
     this.applicantGender = this._userService.applicant.applicantDetails.Gender;
     this.applicantAge = this._userService.applicant.applicantDetails.Age;
     this.spouseAge = this._userService.applicant.applicantDetails.SpouseAge;
-    this.maaraige = this._userService.applicant.applicantDetails.MaritalStatus;
+    this.marriage = this._userService.applicant.applicantDetails.MaritalStatus;
     this.onCountryLoad(this.countryCode);
     this.onApplicant(this._userService.applicant.applicantDetails.DateOfBirth);
     this.onSpouse(this._userService.applicant.applicantDetails.SpouseDateOfBirth);
     this.isAdult();
-    this.onMarriage();
+    this.onMarriage(this._userService.applicant.applicantDetails.MaritalStatus);
   }
 
   initFormData() {
@@ -120,7 +121,7 @@ export class ApplicantDetailsComponent implements OnInit {
       this.applicantData = applicantData;
       this._userService.setSessionStorageApplicant(this.applicantData);
       this._toastr.success("Data Saved");
-      //   this._router.navigate(['/applicant/medical-details']);
+      this._router.navigate(['/applicant/medical-details']);
     }
     else {
       this._toastr.error('Fill all details');
@@ -166,8 +167,8 @@ export class ApplicantDetailsComponent implements OnInit {
   }
 
   onChange(event: any) {
-    this.maaraige = event.target.value;
-    this.onMarriage();
+    this.marriage = event.target.value;
+    this.onMarriage(this.marriage);
     this.applicantBasicForm.patchValue({
       SpouseFullName: '',
       SpouseGender: '',
@@ -176,12 +177,27 @@ export class ApplicantDetailsComponent implements OnInit {
     })
   }
 
-  onMarriage() {
-    if (this.maaraige == 'Married') {
+  onMarriage(val:any) {
+    if (val == 'Married') {
       this.marriedStatus = true;
-    } else if (this.maaraige == 'Unmarried') {
+      this.applicantBasicForm.controls['SpouseFullName'].setValidators([ Validators.required]);
+      this.applicantBasicForm.controls['SpouseGender'].setValidators([ Validators.required]);
+      this.applicantBasicForm.controls['SpouseDateOfBirth'].setValidators([ Validators.required]);
+      this.applicantBasicForm.controls['SpouseAge'].setValidators([ Validators.required]);
+    }  else if (val == 'Unmarried') {
       this.marriedStatus = false;
-    } else {
+      this.applicantBasicForm
+      .patchValue({
+        SpouseFullName: '',
+        SpouseGender: '',
+        SpouseDateOfBirth: '',
+        SpouseAge: '',
+      });
+      this.applicantBasicForm.controls['SpouseFullName'].setValidators([ Validators.nullValidator]);
+      this.applicantBasicForm.controls['SpouseGender'].setValidators([ Validators.nullValidator]);
+      this.applicantBasicForm.controls['SpouseDateOfBirth'].setValidators([ Validators.nullValidator]);
+      this.applicantBasicForm.controls['SpouseAge'].setValidators([ Validators.nullValidator]);    }
+    else{
       this.marriedStatus = false;
     }
   }
@@ -237,8 +253,10 @@ export class ApplicantDetailsComponent implements OnInit {
   isAdult() {
     if (this.applicantAge >= 21 && this.applicantGender == 'Male') {
       this.applicantAdult = true;
+      this.applicantBasicForm.controls['MaritalStatus'].setValidators([ Validators.required]);
     } else if (this.applicantAge >= 18 && this.applicantGender == 'Female') {
       this.applicantAdult = true;
+      this.applicantBasicForm.controls['MaritalStatus'].setValidators([ Validators.required]);
     } else {
       this.applicantAdult = false;
     }

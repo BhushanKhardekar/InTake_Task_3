@@ -45,6 +45,8 @@ export class MedicalDetailsComponent implements OnInit {
   isSmoke = false;
   isAlcohol = false;
   isOtherInfo = false;
+  isMarried = false;
+  checkBoxGroup = false;
 
   constructor(
     private _formbuilder: FormBuilder,
@@ -59,6 +61,7 @@ export class MedicalDetailsComponent implements OnInit {
     this._applicantService.getApplicantData();
     this.initMedicalFrom();
     this.onLoadCheckData();
+
   }
 
   //Function
@@ -88,6 +91,12 @@ export class MedicalDetailsComponent implements OnInit {
     this.onLoadSmokeCheck(this.checkBoxSmoke);
     this.onLoadAlcoholCheck(this.checkBoxAlcohol);
     this.onLoadOtherInfoCheck(this.checkBoxOtherInfo);
+    if (this._applicantService.applicant.applicantDetails.MaritalStatus == 'Married') {
+      this.isMarried = true;
+    }
+    else {
+      this.isMarried = false;
+    }
   }
 
   selectCheckBox(targetType: CheckBoxType) {
@@ -100,17 +109,24 @@ export class MedicalDetailsComponent implements OnInit {
 
   medicalFormInfo(data: any) {
     this.formSubmitted = true;
-    if (this.applicantMedicalForm.valid) {
-      this._applicantService.setSessionStorageMedical(data)
-      this._toastr.success("Data Saved");
-      this._router.navigate(['/applicant/review-details']);
+    this.checkBoxGroup = true;
+    if (this.isSmoke || this.isAlcohol || this.isOtherInfo) {
+      if (this.applicantMedicalForm.valid) {
+        this._applicantService.setSessionStorageMedical(data)
+        this._toastr.success("Data Saved");
+        this._router.navigate(['/applicant/review-details']);
+      }
+      else {
+        this._toastr.error('Fill all details');
+      }
     }
     else {
-      this.formSubmitted = false;
+
+      this._toastr.error('Fill all details');
     }
   }
 
-  ageCalculatorApplicant(event:any){
+  ageCalculatorApplicant(event: any) {
     let age = event.target.value;
     if (age > this.minDate && age < this.maxDate) {
       this.onApplicant(age);
@@ -211,6 +227,8 @@ export class MedicalDetailsComponent implements OnInit {
   onLoadSmokeCheck(val: any) {
     if (val) {
       this.isSmoke = true;
+      this.applicantMedicalForm.controls['Smoke'].setValidators([Validators.required]);
+      this.applicantMedicalForm.controls['Asthama'].setValidators([Validators.required]);
     }
     else {
       this.applicantMedicalForm.patchValue({
@@ -223,6 +241,7 @@ export class MedicalDetailsComponent implements OnInit {
   onLoadAlcoholCheck(val: any) {
     if (val) {
       this.isAlcohol = true;
+      this.applicantMedicalForm.controls['Alcohol'].setValidators([Validators.required]);
     }
     else {
       this.applicantMedicalForm.patchValue({
@@ -234,6 +253,7 @@ export class MedicalDetailsComponent implements OnInit {
   onLoadOtherInfoCheck(val: any) {
     if (val) {
       this.isOtherInfo = true;
+      this.applicantMedicalForm.controls['OtherInfo'].setValidators([Validators.required]);
     }
     else {
       this.applicantMedicalForm.patchValue({

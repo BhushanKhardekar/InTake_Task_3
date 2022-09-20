@@ -13,7 +13,7 @@
           <label class="form-check-label" for="flexCheckDefault">Self Insurance</label>
         </div>
 
-        <div class="col-4 form-check">
+        <div class="col-4 form-check" *ngIf="isMarried">
           <input class="form-check-input" type="checkbox" formControlName="checkSpouse" (change)="onSpouseCheck($event)"
             [checked]="currentlyChecked === check_box_type.Spouse" (click)="selectCheckBox(check_box_type.Spouse)" />
           <label class="form-check-label" for="flexCheckDefault">Spouse Insurance</label>
@@ -28,7 +28,7 @@
       <div class="row pb-3">
         <div class="col-6">
           <label for="FullName" class="form-label">Full Name</label>
-          <input type="text" class="form-control" formControlName="FullName" [attr.disabled]="
+          <input type="text" class="form-control" formControlName="FullName" [attr.readonly]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
@@ -39,7 +39,7 @@
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Gender</label>
-          <input type="text" class="form-control" formControlName="Gender" [attr.disabled]="
+          <input type="text" class="form-control" formControlName="Gender" [attr.readonly]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
@@ -50,7 +50,8 @@
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">DateOfBirth</label>
-          <input type="date" max="{{ this.maxDate }}" (change)="ageCalculatorApplicant($event)" class="form-control" formControlName="DateOfBirth" [attr.disabled]="
+          <input type="date" max="{{ this.maxDate }}" (change)="ageCalculatorApplicant($event)" class="form-control"
+            formControlName="DateOfBirth" [attr.readonly]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
@@ -61,7 +62,14 @@
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Age</label>
-          <input type="text" class="form-control" formControlName="Age" readonly>  </div>
+          <input type="text" class="form-control" formControlName="Age" readonly>
+          <span style="color: red" *ngIf="
+          (f.Age && f.Age.invalid && f.Age.touched) ||
+          (f.Age && f.Age.invalid && formSubmitted)
+        ">
+            Required</span>
+        </div>
+
       </div>
       <!-- //General Info -->
 
@@ -77,7 +85,7 @@
             <div class="col-8">
               <div *ngIf="isSmoke">
                 <label class="form-label">Do you smkoke?</label>
-                <input type="text" class="form-control" [required]="isSmoke" formControlName="Smoke" />
+                <input type="text" class="form-control" formControlName="Smoke" />
                 <span style="color: red" *ngIf="
                     (f.Smoke && f.Smoke.invalid && f.Smoke.touched) ||
                     (f.Smoke && f.Smoke.invalid && formSubmitted)">
@@ -85,7 +93,7 @@
               </div>
               <div *ngIf="isSmoke">
                 <label class="form-label">Do you have Asthama?</label>
-                <input type="text" class="form-control" [required]="isSmoke" formControlName="Asthama" />
+                <input type="text" class="form-control" formControlName="Asthama" />
                 <span style="color: red" *ngIf="
                     (f.Asthama && f.Asthama.invalid && f.Asthama.touched) ||
                     (f.Asthama && f.Asthama.invalid && formSubmitted)
@@ -105,7 +113,7 @@
             <div class="col-8">
               <div *ngIf="isAlcohol">
                 <label class="form-label">Do you drink Alcohol?</label>
-                <input type="text" class="form-control" [required]="isAlcohol" formControlName="Alcohol" />
+                <input type="text" class="form-control" formControlName="Alcohol" />
                 <span style="color: red" *ngIf="
                     (f.Alcohol && f.Alcohol.invalid && f.Alcohol.touched) ||
                     (f.Alcohol && f.Alcohol.invalid && formSubmitted)
@@ -126,7 +134,7 @@
             <div class="col-8">
               <div *ngIf="isOtherInfo">
                 <label class="form-label">Mention</label>
-                <input type="text" class="form-control" [required]="isOtherInfo" formControlName="OtherInfo" />
+                <input type="text" class="form-control" formControlName="OtherInfo" />
                 <span style="color: red" *ngIf="(f.OtherInfo && f.OtherInfo.invalid && f.OtherInfo.touched) ||
                     (f.OtherInfo && f.OtherInfo.invalid && formSubmitted)
                   ">
@@ -135,6 +143,8 @@
             </div>
           </div>
         </div>
+        <span style="color: red" *ngIf="checkBoxGroup">Select atleast one checkbox</span>
+
       </div>
       <!-- //HealthInfo -->
     </form>
