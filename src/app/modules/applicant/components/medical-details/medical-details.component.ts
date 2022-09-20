@@ -24,6 +24,12 @@ export class MedicalDetailsComponent implements OnInit {
   isApplicantSelected: any;
   isSpouseSelected: any;
   isOtherSelected: any;
+  checkBoxApplicant: any;
+  checkBoxSpouse: any;
+  checkBoxOthers: any;
+  checkBoxSmoke :any;
+  checkBoxAlcohol :any;
+  checkBoxOtherInfo :any;
 
   //Boolean
   formSubmitted = false;
@@ -44,34 +50,46 @@ export class MedicalDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this._applicantService.getApplicantData();
-    this.onLoadSmokeCheck(this._applicantService.medicalData.Smoke);
-    this.onLoadAlcoholCheck(this._applicantService.medicalData.Alcohol);
-    this.onLoadOtherInfoCheck(this._applicantService.medicalData.OtherInfo);
     this.initMedicalFrom();
+    this.onLoadCheckData();
   }
 
   //Function
   initMedicalFrom() {
     this.applicantMedicalForm = this._formbuilder.group({
-      checkApplicant: [this._applicantService.medicalData.checkApplicant],
-      checkSpouse: [this._applicantService.medicalData.checkSpouse],
-      checkOthers: [this._applicantService.medicalData.checkOthers],
-      FullName: [this._applicantService.medicalData.FullName, Validators.required],
-      Gender: [this._applicantService.medicalData.Gender, Validators.required],
-      DateOfBirth: [this._applicantService.medicalData.DateOfBirth, Validators.required],
-      Age: [this._applicantService.medicalData.Age, Validators.required],
-      Smoke: [this._applicantService.medicalData.Smoke],
-      Asthama: [this._applicantService.medicalData.Asthama],
-      Alcohol: [this._applicantService.medicalData.Alcohol],
-      OtherInfo: [this._applicantService.medicalData.OtherInfo],
-      checkSmoke: [this._applicantService.medicalData.checkSmoke],
-      checkAlcohol: [this._applicantService.medicalData.checkAlcohol],
-      checkOtherInfo: [this._applicantService.medicalData.checkOtherInfo],
+      checkApplicant: [],
+      checkSpouse: [],
+      checkOthers: [],
+      FullName: [this._applicantService.applicant.medicalDetails.FullName, Validators.required],
+      Gender: [this._applicantService.applicant.medicalDetails.Gender, Validators.required],
+      DateOfBirth: [this._applicantService.applicant.medicalDetails.DateOfBirth, Validators.required],
+      Age: [this._applicantService.applicant.medicalDetails.Age, Validators.required],
+      Smoke: [this._applicantService.applicant.medicalDetails.Smoke],
+      Asthama: [this._applicantService.applicant.medicalDetails.Asthama],
+      Alcohol: [this._applicantService.applicant.medicalDetails.Alcohol],
+      OtherInfo: [this._applicantService.applicant.medicalDetails.OtherInfo],
+      checkSmoke: [this._applicantService.applicant.medicalDetails.checkSmoke],
+      checkAlcohol: [this._applicantService.applicant.medicalDetails.checkAlcohol],
+      checkOtherInfo: [this._applicantService.applicant.medicalDetails.checkOtherInfo]
     });
+    this.checkBoxSmoke = this._applicantService.applicant.medicalDetails.checkSmoke;
+    this.checkBoxAlcohol =this._applicantService.applicant.medicalDetails.checkAlcohol;
+    this.checkBoxOtherInfo =this._applicantService.applicant.medicalDetails.checkOtherInfo;
+    this.checkBoxApplicant = this._applicantService.applicant.medicalDetails.checkApplicant;
+    this.checkBoxSpouse =this._applicantService.applicant.medicalDetails.checkSpouse;
+    this.checkBoxOthers =this._applicantService.applicant.medicalDetails.checkOthers;
   }
 
+  onLoadCheckData(){
+    this.onLoadSmokeCheck(this.checkBoxSmoke);
+    this.onLoadAlcoholCheck( this.checkBoxAlcohol);
+    this.onLoadOtherInfoCheck(this.checkBoxOtherInfo);
+    //this.onLoadApplicant(this.checkBoxApplicant);
+    //this.onloadSpouse(this.checkBoxSpouse);
+    //this.onLoadOther(this.checkBoxOthers);
+    }
+
   selectCheckBox(targetType: CheckBoxType) {
-    // If the checkbox was already checked, clear the currentlyChecked variable
     if (this.currentlyChecked === targetType) {
       this.currentlyChecked = CheckBoxType.None;
       return;
@@ -80,13 +98,11 @@ export class MedicalDetailsComponent implements OnInit {
   }
 
   medicalFormInfo(data: any) {
+    this.formSubmitted = true;
     if (this.applicantMedicalForm.valid) {
-      this.formSubmitted = true;
-      sessionStorage.setItem(
-        'medicalData',
-        JSON.stringify(data)
-      );
+      this._applicantService.setSessionStorageMedical(data)
       this._toastr.success("Data Saved");
+      this._router.navigate(['/applicant/review-details']);
     }
     else {
       this.formSubmitted = false;
@@ -99,40 +115,63 @@ export class MedicalDetailsComponent implements OnInit {
 
   //TextBoxInfo
   onApplicantCheck(event: any) {
-    if (event.target.checked) {
-      this.applicantMedicalForm.patchValue({
-        FullName: this._applicantService.applicant.FullName,
-        Gender: this._applicantService.applicant.Gender,
-        DateOfBirth: this._applicantService.applicant.DateOfBirth,
-        Age: this._applicantService.applicant.Age,
-      });
-      this.isApplicantSelected = true;
-    } else {
-      this.isApplicantSelected = null;
-      this.initMedicalFrom();
-    }
+    let val = event.target.checked;
+    this.onLoadApplicant(val);
   }
   onSpouseCheck(event: any) {
-    if (event.target.checked) {
+    let val = event.target.checked;
+    this.onloadSpouse(val);
+  }
+  onOtherCheck(event: any) {
+    let val = event.target.checked
+    this.onLoadOther(val);
+  }
+
+  //OnloadCheckBox
+  onLoadApplicant(val:any){
+    if (val) {
       this.applicantMedicalForm.patchValue({
-        FullName: this._applicantService.applicant.SpouseFullName,
-        Gender: this._applicantService.applicant.SpouseGender,
-        DateOfBirth: this._applicantService.applicant.SpouseDateOfBirth,
-        Age: this._applicantService.applicant.SpouseAge,
+        FullName: this._applicantService.applicant.applicantDetails.FullName,
+        Gender: this._applicantService.applicant.applicantDetails.Gender,
+        DateOfBirth: this._applicantService.applicant.applicantDetails.DateOfBirth,
+        Age: this._applicantService.applicant.applicantDetails.Age,
+      });
+      this.isApplicantSelected = true;
+    }
+    else {
+      this.isApplicantSelected = null;
+      this.defaultPatchForm();
+    }
+  }
+  onloadSpouse(val:any){
+    if (val) {
+      this.applicantMedicalForm.patchValue({
+        FullName: this._applicantService.applicant.applicantDetails.SpouseFullName,
+        Gender: this._applicantService.applicant.applicantDetails.SpouseGender,
+        DateOfBirth: this._applicantService.applicant.applicantDetails.SpouseDateOfBirth,
+        Age: this._applicantService.applicant.applicantDetails.SpouseAge,
       });
       this.isSpouseSelected = true;
     } else {
       this.isSpouseSelected = null;
-      this.initMedicalFrom();
+      this.defaultPatchForm();
     }
   }
-  onOtherCheck(event: any) {
-    this.isOtherSelected = null;
-    this.isSpouseSelected = null;
-    this.isApplicantSelected = null;
-    if (event.target.checked) {
-      this.initMedicalFrom();
+  onLoadOther(val:any){
+    if (val) {
+      this.isSpouseSelected = null;
+      this.isApplicantSelected = null;
+      this.isOtherSelected=null;
+      this.defaultPatchForm();
     }
+  }
+  defaultPatchForm(){
+    this.applicantMedicalForm.patchValue({
+      FullName: '',
+      Gender:'',
+      DateOfBirth:'',
+      Age:''
+    });
   }
 
   //HealthInfoCheckBox OnCheck
@@ -149,7 +188,6 @@ export class MedicalDetailsComponent implements OnInit {
     this.onLoadOtherInfoCheck(val)
   }
 
-
   //HealthInfoCheckBox OnLoad
   onLoadSmokeCheck(val:any){
     if (val) {
@@ -163,7 +201,6 @@ export class MedicalDetailsComponent implements OnInit {
       this.isSmoke = false;
     }
   }
-
   onLoadAlcoholCheck(val:any){
     if (val) {
       this.isAlcohol = true;
@@ -175,7 +212,6 @@ export class MedicalDetailsComponent implements OnInit {
       this.isAlcohol = false;
     }
   }
-
   onLoadOtherInfoCheck(val:any){
     if (val) {
       this.isOtherInfo = true;

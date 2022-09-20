@@ -1,1 +1,93 @@
-<p>review-details works!</p>
+<div class="container">
+
+
+  <div class="row">
+    <div class="col-4">
+      <form #form="ngForm">
+        <div class="row pb-5" *ngFor="let data of availablePlans; index as i">
+          <table style="border:1px solid black;">
+            <tbody class="p-2">
+              <input class="form-check-input" name="flexRadioDefault" (click)="onRadioClick(i)" type="radio">
+              <tr>
+                <th>CarrierName</th>
+                <td>{{data.CarrierName}}</td>
+              </tr>
+              <tr>
+                <th>MaximumCoverage</th>
+                <td>{{data.CarrierDetails.MaximumCoverage}}</td>
+              </tr>
+              <tr>
+                <th>MinimumCoverage</th>
+                <td>{{data.CarrierDetails.MinimumCoverage}}</td>
+              </tr>
+              <tr>
+                <th>Premium</th>
+                <td>{{data.CarrierDetails.Premium}}</td>
+              </tr>
+              <tr>
+                <th>Term</th>
+                <td>{{data.CarrierDetails.Term}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-success" (click)="onSubmit()" >Submit</button>
+      </form>
+    </div>
+
+
+    <!-- Applicant Deatils -->
+    <div class="col-8">
+      <div class="container">
+        <div class="row">
+          <div>
+            <h4>Applicant Details</h4>
+            Full Name : {{applicantData.FullName}} <br>
+            Phone Number : {{applicantData.PhoneNumber}}<br>
+            Email : {{applicantData.Email}}<br>
+            Gender : {{applicantData.Gender}}<br>
+            Date Of Birth : {{applicantData.DateOfBirth}}<br>
+            Age : {{applicantData.Age}}<br>
+            MaritalStatus : {{applicantData.MaritalStatus}}<br>
+            <h5>Spouse Details</h5>
+            FullName : {{applicantData.SpouseFullName}}<br>
+            Gender : {{applicantData.SpouseGender}}<br>
+            Date Of Birth :{{applicantData.SpouseDateOfBirth}}<br>
+            Age : {{applicantData.SpouseAge}}<br>
+            <h5>Address Deatils</h5>
+            StreetAddress : {{applicantData.StreetAddress}}<br>
+            Country : {{applicantData.Country}}<br>
+            City : {{applicantData.City}}<br>
+            State : {{applicantData.State}}<br>
+            ZipCode : {{applicantData.ZipCode}}<br>
+          </div>
+          <div class="pt-3">
+            <button class="btn btn-outline-primary" type="button"
+              routerLink="/applicant/applicant-details">Edit</button>
+          </div>
+        </div>
+        <div class="row pt-4">
+          <h3>Medical Details</h3>
+          <div>
+            <h6>Insurance For : </h6>
+            <span *ngIf="checkApplicant">Self Insurance</span><br>
+            <span *ngIf="checkSpouse">Spouse Insurance</span><br>
+            <span *ngIf="checkOtherInfo">Others Insurance</span><br>
+            FullName : {{applicantMedicalData.FullName}}<br>
+            Gender : {{applicantMedicalData.Gender}}<br>
+            Date Of Birth :{{applicantMedicalData.DateOfBirth}}<br>
+            Age : {{applicantMedicalData.Age}}<br>
+            <h6>Other Healf Info</h6>
+            Do you smkoke : {{applicantMedicalData.Smoke}} <br>
+            Do you have Asthama : {{applicantMedicalData.Asthama}}<br>
+            Do you drink Alcohol : {{applicantMedicalData.Alcohol}}<br>
+            Other HealfInfo : {{applicantMedicalData.OtherInfo}}
+          </div>
+          <div class="pt-3">
+            <button class="btn btn-outline-primary" type="button" routerLink="/applicant/medical-details">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

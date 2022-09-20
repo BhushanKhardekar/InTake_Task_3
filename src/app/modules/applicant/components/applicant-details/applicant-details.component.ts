@@ -19,6 +19,7 @@ export class ApplicantDetailsComponent implements OnInit {
   code: any;
   states: any;
   maxLen: any;
+  minLen: any;
   minDate: any;
   maxDate: any;
   countryCode: any;
@@ -76,51 +77,45 @@ export class ApplicantDetailsComponent implements OnInit {
   }
   initApplicantForm() {
     this.applicantBasicForm = this._formbuilder.group({
-      FullName: [this._userService.applicant.FullName, Validators.required],
+      FullName: [this._userService.applicant.applicantDetails.FullName, Validators.required],
       PhoneNumber: [
-        this._userService.applicant.PhoneNumber,
+        this._userService.applicant.applicantDetails.PhoneNumber,
         Validators.required,
       ],
       Email: [
-        this._userService.applicant.Email,
+        this._userService.applicant.applicantDetails.Email,
         [
           Validators.pattern('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'),
           Validators.required,
         ],
       ],
-      Gender: [this._userService.applicant.Gender, Validators.required],
+      Gender: [this._userService.applicant.applicantDetails.Gender, Validators.required],
       DateOfBirth: [
-        this._userService.applicant.DateOfBirth,
+        this._userService.applicant.applicantDetails.DateOfBirth,
         Validators.required,
       ],
-      Age: [this._userService.applicant.Age, Validators.required],
-      MaritalStatus: [
-        this._userService.applicant.MaritalStatus,
-        Validators.required,
-      ],
-      SpouseFullName: [this._userService.applicant.SpouseFullName],
-      SpouseGender: [this._userService.applicant.SpouseGender],
-      SpouseDateOfBirth: [this._userService.applicant.SpouseDateOfBirth],
-      SpouseAge: [this._userService.applicant.SpouseAge],
-      StreetAddress: [
-        this._userService.applicant.StreetAddress,
-        Validators.required,
-      ],
-      City: [this._userService.applicant.City, Validators.required],
-      State: [this._userService.applicant.State, Validators.required],
-      ZipCode: [this._userService.applicant.ZipCode, Validators.required],
-      Country: [this._userService.applicant.Country, Validators.required],
+      Age: [this._userService.applicant.applicantDetails.Age, Validators.required],
+      MaritalStatus: [this._userService.applicant.applicantDetails.MaritalStatus, Validators.required],
+      SpouseFullName: [this._userService.applicant.applicantDetails.SpouseFullName],
+      SpouseGender: [this._userService.applicant.applicantDetails.SpouseGender],
+      SpouseDateOfBirth: [this._userService.applicant.applicantDetails.SpouseDateOfBirth],
+      SpouseAge: [this._userService.applicant.applicantDetails.SpouseAge],
+      StreetAddress: [this._userService.applicant.applicantDetails.StreetAddress, Validators.required],
+      City: [this._userService.applicant.applicantDetails.City, Validators.required],
+      State: [this._userService.applicant.applicantDetails.State, Validators.required],
+      ZipCode: [this._userService.applicant.applicantDetails.ZipCode, Validators.required],
+      Country: [this._userService.applicant.applicantDetails.Country, Validators.required],
     });
-    this.countryCode = this._userService.applicant.Country;
-    this.applicantGender = this._userService.applicant.Gender;
-    this.applicantAge = this._userService.applicant.Age;
-    this.spouseAge = this._userService.applicant.SpouseAge;
-    this.maaraige = this._userService.applicant.MaritalStatus;
+    this.countryCode = this._userService.applicant.applicantDetails.Country;
+    this.applicantGender = this._userService.applicant.applicantDetails.Gender;
+    this.applicantAge = this._userService.applicant.applicantDetails.Age;
+    this.spouseAge = this._userService.applicant.applicantDetails.SpouseAge;
+    this.maaraige = this._userService.applicant.applicantDetails.MaritalStatus;
     this.onCountryLoad(this.countryCode);
-    this.onDateChnage(this._userService.applicant.DateOfBirth);
+    this.onApplicant(this._userService.applicant.applicantDetails.DateOfBirth);
     this.isAdult();
     this.onMarriage();
-    this.onSpouse(this._userService.applicant.SpouseDateOfBirth);
+    this.onSpouse(this._userService.applicant.applicantDetails.SpouseDateOfBirth);
   }
 
   initFormData() {
@@ -135,9 +130,12 @@ export class ApplicantDetailsComponent implements OnInit {
     this.formSubmitted = true;
     if (this.applicantBasicForm.valid) {
       this.applicantData = applicantData;
-      sessionStorage.setItem('applicantData',JSON.stringify(this.applicantData));
+      this._userService.setSessionStorageApplicant(this.applicantData);
       this._toastr.success("Data Saved");
       this._router.navigate(['/applicant/medical-details']);
+    }
+    else {
+      this._toastr.error('Fill all details');
     }
   }
 
@@ -160,8 +158,9 @@ export class ApplicantDetailsComponent implements OnInit {
   ageCalculatorApplicant(event: any) {
     let age = event.target.value;
     if (age > this.minDate && age < this.maxDate) {
-      this.onDateChnage(age);
+      this.onApplicant(age);
     }
+    this.isAdult();
   }
 
   ageCalculatorSpouse(event: any) {
@@ -171,14 +170,13 @@ export class ApplicantDetailsComponent implements OnInit {
     }
   }
 
-  onDateChnage(age: any) {
+  onApplicant(age: any) {
     if (age) {
       const convertAge = new Date(age);
       const timeDiff = Math.abs(Date.now() - convertAge.getTime());
       this.applicantAge = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
       this.applicantBasicForm.patchValue({ Age: this.applicantAge });
       this.currentApplicantAge = true;
-      this.isAdult();
     } else {
       return;
     }
@@ -216,20 +214,20 @@ export class ApplicantDetailsComponent implements OnInit {
     this.countryCode = event;
     if (this.countryCode == 'US') {
       this.states = this.usStates;
-      this.maxLen = 5;
+      this.maxLen = this.minLen = 5;
     } else if (this.countryCode == 'CN') {
       this.states = this.cnStates;
-      this.maxLen = 7;
+      this.maxLen = this.minLen =7;
     }
   }
 
-  onKyePress(event: any) {
+  onKeyPress(event: any) {
     if (this.countryCode == 'CN') {
       let patt = /[a-zA-Z0-9\s]+/;
       let result = patt.test(event.key);
       return result;
     } else {
-      let patt = /[0-9/d]+/;
+      let patt = /^([0-9])$/;
       let result = patt.test(event.key);
       return result;
     }
@@ -258,10 +256,9 @@ export class ApplicantDetailsComponent implements OnInit {
 
   //Boolean Functions
   isAdult() {
-    let age = this.applicantAge;
-    if (age >= 18 && this.applicantGender == 'F') {
+    if (this.applicantAge >= 21 && this.applicantGender == 'Male') {
       this.applicantAdult = true;
-    } else if (age >= 21 && this.applicantGender == 'M') {
+    } else if (this.applicantAge >= 18 && this.applicantGender == 'Female') {
       this.applicantAdult = true;
     } else {
       this.applicantAdult = false;

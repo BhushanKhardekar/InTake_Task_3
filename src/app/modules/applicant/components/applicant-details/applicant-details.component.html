@@ -75,6 +75,10 @@
           ">
           Required</span>
       </div>
+
+
+
+
       <!-- Spouse details -->
       <div class="row" *ngIf="this.marriedStatus">
         <div class="py-3">
@@ -178,8 +182,8 @@
         </div>
         <div class="col-4">
           <label for="ZipCode" class="form-label">ZipCode</label>
-          <input type="text" class="form-control" [maxlength]="this.maxLen" formControlName="ZipCode"
-            (keypress)="onKyePress($event)" placeholder="543210" />
+          <input type="text" class="form-control" [maxlength]="this.maxLen" [minlength]="this.minLen" formControlName="ZipCode"
+            (keypress)="onKeyPress($event)" placeholder="543210" />
           <span style="color: red" *ngIf="
               (f.ZipCode && f.ZipCode.invalid && f.ZipCode.touched) ||
               (f.ZipCode && f.ZipCode.invalid && formSubmitted)

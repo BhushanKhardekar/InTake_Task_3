@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { ApplicantDetails } from '../models/applicantDetails.model';
-import { ApplicantMedicalDetails } from '../models/applicantMedicalDetails.model';
+import { Applicant } from '../models/applicant.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,22 +8,25 @@ import { ApplicantMedicalDetails } from '../models/applicantMedicalDetails.model
 export class ApplicantService {
   constructor(private _toastr: ToastrService) { }
 
-  public applicant: ApplicantDetails = new ApplicantDetails();
-  public medicalData : ApplicantMedicalDetails = new ApplicantMedicalDetails();
-
-  applicantData: any;
-  userInfoFinal: any;
+  public applicant : Applicant = new Applicant();
 
   getApplicantData() {
-    let userData: any = sessionStorage.getItem('applicantData');
-    if (userData) {
-      this.applicant = JSON.parse(userData);
+    let applicantData: any = sessionStorage.getItem('applicant');
+    if (applicantData) {
+      this.applicant= JSON.parse(applicantData);
     }
-    let userMedicalData: any = sessionStorage.getItem('medicalData');
+  }
 
-    if (userMedicalData) {
-      this.medicalData = JSON.parse(userMedicalData);
-    }
-    console.log(this.medicalData)
+  setSessionStorageApplicant(data:any){
+    this.applicant.applicantDetails= data;
+    sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
+  }
+  setSessionStorageMedical(data:any){
+    this.applicant.medicalDetails= data;
+    sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
+  }
+  setSessionStoragePlan(data:any){
+    this.applicant.applicantPlan= data;
+    sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
   }
 }
