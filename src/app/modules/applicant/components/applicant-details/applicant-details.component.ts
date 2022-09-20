@@ -116,15 +116,6 @@ export class ApplicantDetailsComponent implements OnInit {
 
   applicantFormInfo(applicantData: any) {
     this.formSubmitted = true;
-    if (applicantData.MaritalStatus == 'Unmarried') {
-      this.applicantBasicForm.get("SpouseFullName").Validators.required;
-      this.applicantBasicForm.get("SpouseFullName").updateValueAndValidity();
-    }
-    else {
-      this.applicantBasicForm.get("SpouseFullName").Validators.null;
-      this.applicantBasicForm.get("SpouseFullName").updateValueAndValidity();
-    }
-
     if (this.applicantBasicForm.valid) {
       this.applicantData = applicantData;
       this._userService.setSessionStorageApplicant(this.applicantData);
