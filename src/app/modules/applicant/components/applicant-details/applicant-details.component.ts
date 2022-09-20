@@ -62,7 +62,6 @@ export class ApplicantDetailsComponent implements OnInit {
   };
 
   //Functions
-
   constructor(
     private _formbuilder: FormBuilder,
     private _router: Router,
@@ -71,29 +70,18 @@ export class ApplicantDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.futureDate();
     this.initFormData();
     this.initApplicantForm();
+    this.minDate = this._userService.minDate;
+    this.maxDate = this._userService.maxDate;
   }
   initApplicantForm() {
     this.applicantBasicForm = this._formbuilder.group({
       FullName: [this._userService.applicant.applicantDetails.FullName, Validators.required],
-      PhoneNumber: [
-        this._userService.applicant.applicantDetails.PhoneNumber,
-        Validators.required,
-      ],
-      Email: [
-        this._userService.applicant.applicantDetails.Email,
-        [
-          Validators.pattern('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'),
-          Validators.required,
-        ],
-      ],
+      PhoneNumber: [this._userService.applicant.applicantDetails.PhoneNumber,Validators.required],
+      Email: [this._userService.applicant.applicantDetails.Email,[Validators.pattern('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'),Validators.required],],
       Gender: [this._userService.applicant.applicantDetails.Gender, Validators.required],
-      DateOfBirth: [
-        this._userService.applicant.applicantDetails.DateOfBirth,
-        Validators.required,
-      ],
+      DateOfBirth: [this._userService.applicant.applicantDetails.DateOfBirth,Validators.required],
       Age: [this._userService.applicant.applicantDetails.Age, Validators.required],
       MaritalStatus: [this._userService.applicant.applicantDetails.MaritalStatus, Validators.required],
       SpouseFullName: [this._userService.applicant.applicantDetails.SpouseFullName],
@@ -113,9 +101,9 @@ export class ApplicantDetailsComponent implements OnInit {
     this.maaraige = this._userService.applicant.applicantDetails.MaritalStatus;
     this.onCountryLoad(this.countryCode);
     this.onApplicant(this._userService.applicant.applicantDetails.DateOfBirth);
+    this.onSpouse(this._userService.applicant.applicantDetails.SpouseDateOfBirth);
     this.isAdult();
     this.onMarriage();
-    this.onSpouse(this._userService.applicant.applicantDetails.SpouseDateOfBirth);
   }
 
   initFormData() {
@@ -128,30 +116,24 @@ export class ApplicantDetailsComponent implements OnInit {
 
   applicantFormInfo(applicantData: any) {
     this.formSubmitted = true;
+    if (applicantData.MaritalStatus == 'Unmarried') {
+      this.applicantBasicForm.get("SpouseFullName").Validators.required;
+      this.applicantBasicForm.get("SpouseFullName").updateValueAndValidity();
+    }
+    else {
+      this.applicantBasicForm.get("SpouseFullName").Validators.null;
+      this.applicantBasicForm.get("SpouseFullName").updateValueAndValidity();
+    }
+
     if (this.applicantBasicForm.valid) {
       this.applicantData = applicantData;
       this._userService.setSessionStorageApplicant(this.applicantData);
       this._toastr.success("Data Saved");
-      this._router.navigate(['/applicant/medical-details']);
+      //   this._router.navigate(['/applicant/medical-details']);
     }
     else {
       this._toastr.error('Fill all details');
     }
-  }
-
-  futureDate() {
-    var date: any = new Date();
-    var today: any = date.getDate();
-    var month: any = date.getMonth();
-    var year: any = date.getFullYear();
-    if (today < 10) {
-      today = '0' + today;
-    }
-    if (month < 10) {
-      month = '0' + month;
-    }
-    this.maxDate = year + '-' + month + '-' + today;
-    this.minDate = '1990-01-01';
   }
 
   //Event Functions
@@ -195,6 +177,12 @@ export class ApplicantDetailsComponent implements OnInit {
   onChange(event: any) {
     this.maaraige = event.target.value;
     this.onMarriage();
+    this.applicantBasicForm.patchValue({
+      SpouseFullName: '',
+      SpouseGender: '',
+      SpouseDateOfBirth: '',
+      SpouseAge: ''
+    })
   }
 
   onMarriage() {
@@ -217,7 +205,7 @@ export class ApplicantDetailsComponent implements OnInit {
       this.maxLen = this.minLen = 5;
     } else if (this.countryCode == 'CN') {
       this.states = this.cnStates;
-      this.maxLen = this.minLen =7;
+      this.maxLen = this.minLen = 7;
     }
   }
 

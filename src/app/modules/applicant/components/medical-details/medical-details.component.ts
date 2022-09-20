@@ -27,9 +27,14 @@ export class MedicalDetailsComponent implements OnInit {
   checkBoxApplicant: any;
   checkBoxSpouse: any;
   checkBoxOthers: any;
-  checkBoxSmoke :any;
-  checkBoxAlcohol :any;
-  checkBoxOtherInfo :any;
+  checkBoxSmoke: any;
+  checkBoxAlcohol: any;
+  checkBoxOtherInfo: any;
+  age: any;
+  currentAge: any;
+  minDate: any;
+  maxDate: any;
+
 
   //Boolean
   formSubmitted = false;
@@ -49,6 +54,8 @@ export class MedicalDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.minDate = this._applicantService.minDate;
+    this.maxDate = this._applicantService.maxDate;
     this._applicantService.getApplicantData();
     this.initMedicalFrom();
     this.onLoadCheckData();
@@ -73,21 +80,15 @@ export class MedicalDetailsComponent implements OnInit {
       checkOtherInfo: [this._applicantService.applicant.medicalDetails.checkOtherInfo]
     });
     this.checkBoxSmoke = this._applicantService.applicant.medicalDetails.checkSmoke;
-    this.checkBoxAlcohol =this._applicantService.applicant.medicalDetails.checkAlcohol;
-    this.checkBoxOtherInfo =this._applicantService.applicant.medicalDetails.checkOtherInfo;
-    this.checkBoxApplicant = this._applicantService.applicant.medicalDetails.checkApplicant;
-    this.checkBoxSpouse =this._applicantService.applicant.medicalDetails.checkSpouse;
-    this.checkBoxOthers =this._applicantService.applicant.medicalDetails.checkOthers;
+    this.checkBoxAlcohol = this._applicantService.applicant.medicalDetails.checkAlcohol;
+    this.checkBoxOtherInfo = this._applicantService.applicant.medicalDetails.checkOtherInfo;
   }
 
-  onLoadCheckData(){
+  onLoadCheckData() {
     this.onLoadSmokeCheck(this.checkBoxSmoke);
-    this.onLoadAlcoholCheck( this.checkBoxAlcohol);
+    this.onLoadAlcoholCheck(this.checkBoxAlcohol);
     this.onLoadOtherInfoCheck(this.checkBoxOtherInfo);
-    //this.onLoadApplicant(this.checkBoxApplicant);
-    //this.onloadSpouse(this.checkBoxSpouse);
-    //this.onLoadOther(this.checkBoxOthers);
-    }
+  }
 
   selectCheckBox(targetType: CheckBoxType) {
     if (this.currentlyChecked === targetType) {
@@ -106,6 +107,24 @@ export class MedicalDetailsComponent implements OnInit {
     }
     else {
       this.formSubmitted = false;
+    }
+  }
+
+  ageCalculatorApplicant(event:any){
+    let age = event.target.value;
+    if (age > this.minDate && age < this.maxDate) {
+      this.onApplicant(age);
+    }
+  }
+  onApplicant(age: any) {
+    if (age) {
+      const convertAge = new Date(age);
+      const timeDiff = Math.abs(Date.now() - convertAge.getTime());
+      this.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
+      this.applicantMedicalForm.patchValue({ Age: this.age });
+      this.currentAge = true;
+    } else {
+      return;
     }
   }
 
@@ -128,7 +147,7 @@ export class MedicalDetailsComponent implements OnInit {
   }
 
   //OnloadCheckBox
-  onLoadApplicant(val:any){
+  onLoadApplicant(val: any) {
     if (val) {
       this.applicantMedicalForm.patchValue({
         FullName: this._applicantService.applicant.applicantDetails.FullName,
@@ -143,7 +162,7 @@ export class MedicalDetailsComponent implements OnInit {
       this.defaultPatchForm();
     }
   }
-  onloadSpouse(val:any){
+  onloadSpouse(val: any) {
     if (val) {
       this.applicantMedicalForm.patchValue({
         FullName: this._applicantService.applicant.applicantDetails.SpouseFullName,
@@ -157,20 +176,20 @@ export class MedicalDetailsComponent implements OnInit {
       this.defaultPatchForm();
     }
   }
-  onLoadOther(val:any){
+  onLoadOther(val: any) {
     if (val) {
       this.isSpouseSelected = null;
       this.isApplicantSelected = null;
-      this.isOtherSelected=null;
+      this.isOtherSelected = null;
       this.defaultPatchForm();
     }
   }
-  defaultPatchForm(){
+  defaultPatchForm() {
     this.applicantMedicalForm.patchValue({
       FullName: '',
-      Gender:'',
-      DateOfBirth:'',
-      Age:''
+      Gender: '',
+      DateOfBirth: '',
+      Age: ''
     });
   }
 
@@ -189,7 +208,7 @@ export class MedicalDetailsComponent implements OnInit {
   }
 
   //HealthInfoCheckBox OnLoad
-  onLoadSmokeCheck(val:any){
+  onLoadSmokeCheck(val: any) {
     if (val) {
       this.isSmoke = true;
     }
@@ -201,7 +220,7 @@ export class MedicalDetailsComponent implements OnInit {
       this.isSmoke = false;
     }
   }
-  onLoadAlcoholCheck(val:any){
+  onLoadAlcoholCheck(val: any) {
     if (val) {
       this.isAlcohol = true;
     }
@@ -212,7 +231,7 @@ export class MedicalDetailsComponent implements OnInit {
       this.isAlcohol = false;
     }
   }
-  onLoadOtherInfoCheck(val:any){
+  onLoadOtherInfoCheck(val: any) {
     if (val) {
       this.isOtherInfo = true;
     }

@@ -21,7 +21,7 @@ export class ReviewDetailsComponent implements OnInit {
     US: 'United States',
     CN: 'Canada',
   };
-
+  insuranceForm:any;
   applicantReviewForm: any;
   isSuccess: any;
   responseValue: any;
@@ -40,6 +40,7 @@ export class ReviewDetailsComponent implements OnInit {
   constructor(
     private _router: Router,
     private _applicantService: ApplicantService,
+    private fb:FormBuilder,
     private _toastr: ToastrService) { }
 
   ngOnInit(): void {

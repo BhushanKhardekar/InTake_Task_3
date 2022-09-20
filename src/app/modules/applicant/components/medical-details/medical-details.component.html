@@ -50,7 +50,7 @@
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">DateOfBirth</label>
-          <input type="text" class="form-control" formControlName="DateOfBirth" [attr.disabled]="
+          <input type="date" max="{{ this.maxDate }}" (change)="ageCalculatorApplicant($event)" class="form-control" formControlName="DateOfBirth" [attr.disabled]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
@@ -61,15 +61,7 @@
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Age</label>
-          <input type="text" class="form-control" formControlName="Age" [attr.disabled]="
-              isApplicantSelected || isSpouseSelected || isOtherSelected
-            " />
-          <span style="color: red" *ngIf="
-              (f.Age && f.Age.invalid && f.Age.touched) ||
-              (f.Age && f.Age.invalid && formSubmitted)
-            ">
-            Required</span>
-        </div>
+          <input type="text" class="form-control" formControlName="Age" readonly>  </div>
       </div>
       <!-- //General Info -->
 

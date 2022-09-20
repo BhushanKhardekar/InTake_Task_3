@@ -87,12 +87,12 @@
         <div class="col-6">
           <label for="SpouseFullName" class="form-label">Spouse Full Name</label>
           <input type="text" class="form-control" formControlName="SpouseFullName" placeholder="Mark David" />
-          <span style="color: red" *ngIf="
+          <!-- <span style="color: red" *ngIf="
               (f.SpouseFullName &&
                 f.SpouseFullName.invalid &&
                 f.SpouseFullName.touched) ||
               (f.SpouseFullName && f.SpouseFullName.invalid && formSubmitted)
-            ">Required</span>
+            ">Required</span> -->
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Gender</label>
@@ -102,19 +102,19 @@
               {{ gender.value }}
             </option>
           </select>
-          <span style="color: red" *ngIf="
+          <!-- <span style="color: red" *ngIf="
               (f.SpouseGender &&
                 f.SpouseGender.invalid &&
                 f.SpouseGender.touched) ||
               (f.SpouseGender && f.SpouseGender.invalid && formSubmitted)
             ">
-            Required</span>
+            Required</span> -->
         </div>
         <div class="col-6">
           <label for="SpouseDateOfBirth" class="form-label">Spouse DateOfBirth</label>
           <input type="date" class="form-control" formControlName="SpouseDateOfBirth"
             (change)="ageCalculatorSpouse($event)" required />
-          <span style="color: red" *ngIf="
+          <!-- <span style="color: red" *ngIf="
               (f.SpouseDateOfBirth &&
                 f.SpouseDateOfBirth.invalid &&
                 f.SpouseDateOfBirth.touched) ||
@@ -122,7 +122,7 @@
                 f.SpouseDateOfBirth.invalid &&
                 formSubmitted)
             ">
-            Required</span>
+            Required</span> -->
         </div>
         <div class="col-6" *ngIf="this.currentSpouseAge">
           <label for="SpouseAge" class="form-label">Spouse Age</label>

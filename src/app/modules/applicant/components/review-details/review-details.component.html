@@ -3,7 +3,7 @@
 
   <div class="row">
     <div class="col-4">
-      <form #form="ngForm">
+      <form #form="ngForm" [formGroup]="insuranceForm">
         <div class="row pb-5" *ngFor="let data of availablePlans; index as i">
           <table style="border:1px solid black;">
             <tbody class="p-2">
@@ -69,10 +69,6 @@
         <div class="row pt-4">
           <h3>Medical Details</h3>
           <div>
-            <h6>Insurance For : </h6>
-            <span *ngIf="checkApplicant">Self Insurance</span><br>
-            <span *ngIf="checkSpouse">Spouse Insurance</span><br>
-            <span *ngIf="checkOtherInfo">Others Insurance</span><br>
             FullName : {{applicantMedicalData.FullName}}<br>
             Gender : {{applicantMedicalData.Gender}}<br>
             Date Of Birth :{{applicantMedicalData.DateOfBirth}}<br>
