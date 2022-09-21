@@ -1,1 +1,36 @@
-<p>payment works!</p>
+<p>Welcome to Payment</p>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <form class="row" #cardFromData="ngForm" [formGroup]="cardFrom">
+        <div>
+          <label class="form-label">Card Holder Name: </label>
+          <input class="form-control" type="text" formControlName="cardHolderName">
+        </div>
+        <div>
+          <label class="form-label">Card Number: </label>
+          <input class="form-control" type="text" formControlName="cardNumber">
+        </div>
+        <div>
+          <label class="form-label">Card Expiry: </label>
+          <input class="form-control" type="text" formControlName="cardExpiry">
+        </div>
+        <div>
+          <label class="form-label">Card CVC: </label>
+          <input class="form-control" type="text" formControlName="cardCVC">
+        </div>
+      </form>
+    </div>
+    <!-- Summary -->
+    <div class="col">
+      <app-summary [applicantDetails]="applicantDetails" [medicalDetails]="medicalDetails"
+        [applicantPlan]="applicantPlan"></app-summary>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-success" (click)="onSubmit(cardFromData.value)">
+      Submit
+    </button>
+  </div>
+</div>
+=

@@ -8,8 +8,8 @@ export class ApplicantMedicalDetails{
   public DateOfBirth:any
   public Age:any
 
-  public Smoke: any
-  public Asthama: any
+  public SmokeText: any
+  public AsthamaText: any
   public Alcohol: any
   public OtherInfo: any
 

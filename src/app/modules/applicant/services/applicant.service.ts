@@ -34,7 +34,7 @@ export class ApplicantService {
       month = '0' + month;
     }
     this.maxDate = year + '-' + month + '-' + today;
-    this.minDate = '1990-01-01';
+    this.minDate = '1900-01-01';
   }
 
   setSessionStorageApplicant(data:any){

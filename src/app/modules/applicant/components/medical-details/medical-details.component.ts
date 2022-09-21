@@ -74,8 +74,8 @@ export class MedicalDetailsComponent implements OnInit {
       Gender: [this._applicantService.applicant.medicalDetails.Gender, Validators.required],
       DateOfBirth: [this._applicantService.applicant.medicalDetails.DateOfBirth, Validators.required],
       Age: [this._applicantService.applicant.medicalDetails.Age, Validators.required],
-      Smoke: [this._applicantService.applicant.medicalDetails.Smoke],
-      Asthama: [this._applicantService.applicant.medicalDetails.Asthama],
+      SmokeText: [this._applicantService.applicant.medicalDetails.SmokeText],
+      AsthamaText: [this._applicantService.applicant.medicalDetails.AsthamaText],
       Alcohol: [this._applicantService.applicant.medicalDetails.Alcohol],
       OtherInfo: [this._applicantService.applicant.medicalDetails.OtherInfo],
       checkSmoke: [this._applicantService.applicant.medicalDetails.checkSmoke],
@@ -227,15 +227,20 @@ export class MedicalDetailsComponent implements OnInit {
   onLoadSmokeCheck(val: any) {
     if (val) {
       this.isSmoke = true;
-      this.applicantMedicalForm.controls['Smoke'].setValidators([Validators.required]);
-      this.applicantMedicalForm.controls['Asthama'].setValidators([Validators.required]);
+      this.applicantMedicalForm.controls['SmokeText'].setValidators(Validators.required);
+      this.applicantMedicalForm.controls['SmokeText'].updateValueAndValidity();
+      this.applicantMedicalForm.controls['AsthamaText'].setValidators(Validators.required);
+      this.applicantMedicalForm.controls['AsthamaText'].updateValueAndValidity();
     }
     else {
-      this.applicantMedicalForm.patchValue({
-        Smoke: [''],
-        Asthama: ['']
-      })
       this.isSmoke = false;
+      this.applicantMedicalForm.controls["SmokeText"].setValue(null);
+      this.applicantMedicalForm.controls["SmokeText"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['SmokeText'].updateValueAndValidity();
+      this.applicantMedicalForm.controls["AsthamaText"].setValue(null);
+      this.applicantMedicalForm.controls["AsthamaText"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['AsthamaText'].updateValueAndValidity();
+
     }
   }
   onLoadAlcoholCheck(val: any) {
@@ -244,10 +249,10 @@ export class MedicalDetailsComponent implements OnInit {
       this.applicantMedicalForm.controls['Alcohol'].setValidators([Validators.required]);
     }
     else {
-      this.applicantMedicalForm.patchValue({
-        Alcohol: [''],
-      })
       this.isAlcohol = false;
+      this.applicantMedicalForm.controls["Alcohol"].setValue(null);
+      this.applicantMedicalForm.controls["Alcohol"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['Alcohol'].updateValueAndValidity();
     }
   }
   onLoadOtherInfoCheck(val: any) {
@@ -256,10 +261,10 @@ export class MedicalDetailsComponent implements OnInit {
       this.applicantMedicalForm.controls['OtherInfo'].setValidators([Validators.required]);
     }
     else {
-      this.applicantMedicalForm.patchValue({
-        OtherInfo: [''],
-      })
       this.isOtherInfo = false;
+      this.applicantMedicalForm.controls["OtherInfo"].setValue(null);
+      this.applicantMedicalForm.controls["OtherInfo"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['OtherInfo'].updateValueAndValidity();
     }
   }
 }

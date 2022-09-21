@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ApplicantContainerComponent } from './components/applicant-container/applicant-container.component';
 import { ApplicantDetailsComponent } from './components/applicant-details/applicant-details.component';
-import { InsuranceDetailsComponent } from './components/insurance-details/insurance-details.component';
 import { MedicalDetailsComponent } from './components/medical-details/medical-details.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { ReviewDetailsComponent } from './components/review-details/review-details.component';
+import { SummaryComponent } from './components/summary/summary.component';
 import { ThankYouComponent } from './components/thank-you/thank-you.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 
@@ -16,14 +16,13 @@ const routes: Routes = [
     children: [
       { path: 'applicant-details', component: ApplicantDetailsComponent },
       { path: 'medical-details', component: MedicalDetailsComponent },
-      { path: 'insurance-details', component: InsuranceDetailsComponent },
       { path: 'review-details', component: ReviewDetailsComponent },
+      { path: 'payment', component: PaymentComponent,},
+      { path: 'thank-you', component: ThankYouComponent },
+      {path: 'summary', component: SummaryComponent },
       { path: '', redirectTo: 'applicant-details', pathMatch: 'full' },
     ],
   },
-  { path: 'payment', component: PaymentComponent },
-  { path: 'thank-you', component: ThankYouComponent },
-  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
 ];
 
 @NgModule({

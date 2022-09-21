@@ -85,19 +85,18 @@
             <div class="col-8">
               <div *ngIf="isSmoke">
                 <label class="form-label">Do you smkoke?</label>
-                <input type="text" class="form-control" formControlName="Smoke" />
+                <input type="text" class="form-control" formControlName="SmokeText" />
                 <span style="color: red" *ngIf="
-                    (f.Smoke && f.Smoke.invalid && f.Smoke.touched) ||
-                    (f.Smoke && f.Smoke.invalid && formSubmitted)">
+                (f.SmokeText && f.SmokeText.invalid && f.SmokeText.touched) ||
+                    (f.SmokeText && f.SmokeText.invalid && formSubmitted)">
                   Required</span>
               </div>
               <div *ngIf="isSmoke">
                 <label class="form-label">Do you have Asthama?</label>
-                <input type="text" class="form-control" formControlName="Asthama" />
+                <input type="text" class="form-control" formControlName="AsthamaText" />
                 <span style="color: red" *ngIf="
-                    (f.Asthama && f.Asthama.invalid && f.Asthama.touched) ||
-                    (f.Asthama && f.Asthama.invalid && formSubmitted)
-                  ">
+                    (f.AsthamaText && f.AsthamaText.invalid && f.AsthamaText.touched) ||
+                    (f.AsthamaText && f.AsthamaText.invalid && formSubmitted)">
                   Required</span>
               </div>
             </div>
@@ -134,8 +133,10 @@
             <div class="col-8">
               <div *ngIf="isOtherInfo">
                 <label class="form-label">Mention</label>
-                <input type="text" class="form-control" formControlName="OtherInfo" />
-                <span style="color: red" *ngIf="(f.OtherInfo && f.OtherInfo.invalid && f.OtherInfo.touched) ||
+                <textarea class="form-control" formControlName="OtherInfo" rows="3"></textarea>
+                <span style="color: red" *ngIf="
+
+                (f.OtherInfo && f.OtherInfo.invalid && f.OtherInfo.touched) ||
                     (f.OtherInfo && f.OtherInfo.invalid && formSubmitted)
                   ">
                   Required</span>
@@ -158,3 +159,11 @@
     </div>
   </div>
 </div>
+<!--
+  ((f.checkSmoke && f.checkSmoke.invalid && f.checkSmoke.touched) ||
+        (f.checkSmoke && f.checkSmoke.invalid && formSubmitted)) ||
+        ((f.checkAlcohol && f.checkAlcohol.invalid && f.checkAlcohol.touched) ||
+        (f.checkAlcohol && f.checkAlcohol.invalid && formSubmitted)) ||
+        ((f.checkOtherInfo && f.checkOtherInfo.invalid && f.checkOtherInfo.touched) ||
+        (f.checkOtherInfo && f.checkOtherInfo.invalid && formSubmitted)) ||
+ -->

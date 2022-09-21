@@ -21,7 +21,7 @@ export class ReviewDetailsComponent implements OnInit {
     US: 'United States',
     CN: 'Canada',
   };
-  insuranceForm:any;
+  insuranceForm: any;
   applicantReviewForm: any;
   isSuccess: any;
   responseValue: any;
@@ -36,16 +36,21 @@ export class ReviewDetailsComponent implements OnInit {
   caPlans: any = [];
   availablePlans: any = [];
   countrySelected: any;
-  selectedPlanId:any;
+  selectedPlanId: any;
+  isSmoke: any;
+  isAlcohol: any;
+  isOther: any;
+
   constructor(
     private _router: Router,
     private _applicantService: ApplicantService,
-    private fb:FormBuilder,
+    private fb: FormBuilder,
     private _toastr: ToastrService) { }
 
   ngOnInit(): void {
     this._applicantService.getApplicantData();
     this.initFormData();
+    this.getInfo();
     this.checkInsuranceFor();
   }
 
@@ -69,22 +74,20 @@ export class ReviewDetailsComponent implements OnInit {
     }
   }
 
-  onRadioClick(val:any){
-    this.selectedPlanId=val;
+  onRadioClick(val: any) {
+    this.selectedPlanId = val;
   }
 
-  onSubmit(){
-    let obj={
-      CarrierName :this.availablePlans[this.selectedPlanId].CarrierName,
-      MaximumCoverage:this.availablePlans[this.selectedPlanId].CarrierDetails.MaximumCoverage,
-      MinimumCoverage:this.availablePlans[this.selectedPlanId].CarrierDetails.MinimumCoverage,
-      Premium:this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
-      Term:this.availablePlans[this.selectedPlanId].CarrierDetails.Term
+  onSubmit() {
+    let obj = {
+      CarrierName: this.availablePlans[this.selectedPlanId].CarrierName,
+      MaximumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MaximumCoverage,
+      MinimumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MinimumCoverage,
+      Premium: this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
+      Term: this.availablePlans[this.selectedPlanId].CarrierDetails.Term
     };
     this._applicantService.setSessionStoragePlan(obj);
-    this._toastr.success("Data Saved");
-    this._router.navigate(['/payment']);
-
+    this._router.navigate(['/applicant/payment']);
   }
 
   initFormData() {
@@ -95,6 +98,12 @@ export class ReviewDetailsComponent implements OnInit {
       this.applicantMedicalData = this.applicant.medicalDetails
     }
     this.getJson();
+  }
+
+  getInfo(){
+    this.isSmoke = this._applicantService.applicant.medicalDetails.checkSmoke;
+    this.isAlcohol =this._applicantService.applicant.medicalDetails.checkAlcohol;
+    this.isOther =this._applicantService.applicant.medicalDetails.checkOtherInfo;
   }
 
   checkInsuranceFor() {

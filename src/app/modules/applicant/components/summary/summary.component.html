@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="row">
+    <div>
+      <h5>Applicant</h5>
+      Full Name : {{applicantDetails.FullName}} <br>
+      Phone Number : {{applicantDetails.PhoneNumber}}<br>
+
+      <h5>Insurance For</h5>
+      Full Name : {{medicalDetails.FullName}} <br>
+      Date Of Birth : {{medicalDetails.DateOfBirth}} <br>
+      <h6>Medical Details</h6>
+
+      <div *ngIf=medicalDetails.checkSmoke>
+        Do You Smoke : {{medicalDetails.SmokeText}}<br>
+        Do you Have Asthama : {{medicalDetails.AsthamaText}}<br>
+      </div>
+
+      <div *ngIf=medicalDetails.checkAlcohol>
+        Do you drink Alcohol : {{medicalDetails.Alcohol}}<br>
+      </div>
+      <div *ngIf=medicalDetails.checkOther>
+        Other heath Information : {{medicalDetails.OtherInfo}} <br>
+      </div>
+      <h6>Insurance Seleted</h6>
+      <div>
+        Carrier Name : {{applicantPlan.CarrierName}} <br>
+        Premium : {{applicantPlan.Premium}}
+      </div>
+    </div>
+  </div>
+</div>
