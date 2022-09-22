@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ApplicantService } from '../../services/applicant.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { constVal } from '../../config/constVal.obj';
 
 @Component({
   selector: 'app-applicant-details',
@@ -37,39 +38,20 @@ export class ApplicantDetailsComponent implements OnInit {
   invalidSpouseAge = false;
   checkBoxGroup = false;
 
-  //Arrays
-  countries = {
-    US: 'United States',
-    CN: 'Canada',
-  };
-
-  genders = {
-    Male: 'Male',
-    Female: 'Female',
-  };
-
-  usStates = {
-    NY: 'New York',
-    OR: 'Oregon',
-    CO: 'Colorado',
-    SC: 'South Carolina',
-    MS: 'Mississippi',
-  };
-
-  cnStates = {
-    NB: 'New Brunswick',
-    QC: 'Quebec',
-    ON: 'Ontario',
-    MB: 'South Manitoba',
-  };
+  countries: any = constVal.countries;
+  genders: any = constVal.genders;
+  usStates: any = constVal.usStates;
+  cnStates: any = constVal.cnStates;
 
   //Functions
   constructor(
     private _formbuilder: FormBuilder,
     private _router: Router,
     private _userService: ApplicantService,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
   ) { }
+
+
 
   ngOnInit(): void {
     this.minDate = this._userService.minDate;

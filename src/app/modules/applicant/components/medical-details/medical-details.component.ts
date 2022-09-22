@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CheckBoxType } from '../../config/checkBoxType.enum';
 import { ApplicantService } from '../../services/applicant.service';
-
-enum CheckBoxType {
-  Applicant,
-  Spouse,
-  Other,
-  None,
-}
 
 @Component({
   selector: 'app-medical-details',
@@ -17,6 +11,7 @@ enum CheckBoxType {
   styleUrls: ['./medical-details.component.css'],
 })
 export class MedicalDetailsComponent implements OnInit {
+
   //variables
   check_box_type = CheckBoxType;
   currentlyChecked = CheckBoxType.None;
@@ -35,7 +30,6 @@ export class MedicalDetailsComponent implements OnInit {
   minDate: any;
   maxDate: any;
 
-
   //Boolean
   formSubmitted = false;
   isFUllName = false;
@@ -52,7 +46,7 @@ export class MedicalDetailsComponent implements OnInit {
     private _formbuilder: FormBuilder,
     private _applicantService: ApplicantService,
     private _router: Router,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -61,7 +55,6 @@ export class MedicalDetailsComponent implements OnInit {
     this._applicantService.getApplicantData();
     this.initMedicalFrom();
     this.onLoadCheckData();
-
   }
 
   //Function

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { constVal } from '../../config/constVal.obj';
 import { ApplicantService } from '../../services/applicant.service';
 
 @Component({
@@ -11,16 +12,7 @@ import { ApplicantService } from '../../services/applicant.service';
 })
 export class ReviewDetailsComponent implements OnInit {
 
-  //Variables
-  incomingJson = {
-    "isSuccess": true,
-    "responseValue": "{\"healthInsuranceDetails\":[{\"CarrierName\":\"Safeco\",\"IsAvailableInUS\":\"Yes\",\"IsAvailableInCA\":\"No\",\"CarrierDetails\":{\"Premium\":\"250.76\",\"Term\":\"6\",\"MinimumCoverage\":\"25000\",\"MaximumCoverage\":\"100000\"}},{\"CarrierName\":\"Travellers\",\"IsAvailableInUS\":\"No\",\"IsAvailableInCA\":\"No\",\"CarrierDetails\":{\"Premium\":\"456.76\",\"Term\":\"12\",\"MinimumCoverage\":\"25000\",\"MaximumCoverage\":\"300000\"}},{\"CarrierName\":\"Progressive\",\"IsAvailableInUS\":\"No\",\"IsAvailableInCA\":\"Yes\",\"CarrierDetails\":{\"Premium\":\"806.76\",\"Term\":\"12\",\"MinimumCoverage\":\"100000\",\"MaximumCoverage\":\"3000000\"}},{\"CarrierName\":\"Mercury\",\"IsAvailableInUS\":\"Yes\",\"IsAvailableInCA\":\"Yes\",\"CarrierDetails\":{\"Premium\":\"776.76\",\"Term\":\"12\",\"MinimumCoverage\":\"70000\",\"MaximumCoverage\":\"2000000\"}}]}"
-  }
 
-  countries = {
-    US: 'United States',
-    CN: 'Canada',
-  };
   insuranceForm: any;
   applicantReviewForm: any;
   isSuccess: any;
@@ -45,7 +37,9 @@ export class ReviewDetailsComponent implements OnInit {
     private _router: Router,
     private _applicantService: ApplicantService,
     private fb: FormBuilder,
-    private _toastr: ToastrService) { }
+    private _toastr: ToastrService,
+    private _constant : constVal
+    ) { }
 
   ngOnInit(): void {
     this._applicantService.getApplicantData();
@@ -55,8 +49,8 @@ export class ReviewDetailsComponent implements OnInit {
   }
 
   getJson() {
-    this.isSuccess = this.incomingJson.isSuccess;
-    this.responseValue = JSON.parse(this.incomingJson.responseValue);
+    this.isSuccess = constVal.staticincomingJson.isSuccess;
+    this.responseValue = JSON.parse(constVal.staticincomingJson.responseValue);
     this.healthInsuranceDetails = this.responseValue.healthInsuranceDetails;
     this.countrySelected = this._applicantService.applicant.applicantDetails.Country;
 
