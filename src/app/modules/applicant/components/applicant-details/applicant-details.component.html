@@ -179,7 +179,9 @@
         </div>
         <div class="col-4">
           <label for="ZipCode" class="form-label">ZipCode</label>
-          <input type="text" class="form-control" [maxlength]="this.maxLen" [minlength]="this.minLen" formControlName="ZipCode"
+
+          <!-- [attr.readonly]="fieldReadOnly" -->
+          <input type="text" class="form-control" maxlength="7" [maxlength]="this.maxLen" [minlength]="this.minLen" formControlName="ZipCode"
             (keypress)="onKeyPress($event)" placeholder="543210" />
           <span style="color: red" *ngIf="
               (f.ZipCode && f.ZipCode.invalid && f.ZipCode.touched) ||

@@ -1,31 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Applicant } from '../models/applicant.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApplicantService {
+  maxDate: any;
+  minDate: any;
+  public applicant: Applicant = new Applicant();
 
-  maxDate:any;
-  minDate:any;
-
-  constructor(private _toastr: ToastrService) {
+  constructor(private _toastr: ToastrService, private router: Router) {
     this.futureDate();
   }
 
-  public applicant : Applicant = new Applicant();
-
-  getApplicantData() {
-    let applicantData: any = sessionStorage.getItem('applicant');
-    if (applicantData) {
-      this.applicant= JSON.parse(applicantData);
-    }
-  }
   futureDate() {
     var date: any = new Date();
     var today: any = date.getDate();
-    var month: any = date.getMonth()+1;
+    var month: any = date.getMonth() + 1;
     var year: any = date.getFullYear();
     if (today < 10) {
       today = '0' + today;
@@ -37,16 +30,23 @@ export class ApplicantService {
     this.minDate = '1900-01-01';
   }
 
-  setSessionStorageApplicant(data:any){
-    this.applicant.applicantDetails= data;
-    sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
+  getApplicantData() {
+    let applicantData: any = sessionStorage.getItem('applicant');
+    if (applicantData) {
+      this.applicant = JSON.parse(applicantData);
+    }
   }
-  setSessionStorageMedical(data:any){
-    this.applicant.medicalDetails= data;
-    sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
-  }
-  setSessionStoragePlan(data:any){
-    this.applicant.applicantPlan= data;
+
+  setValueToModel(data?: any) {
+    if (this.router.url.includes('applicant/applicant-details')) {
+      this.applicant.applicantDetails = data;
+    }
+    if (this.router.url.includes('applicant/medical-details')) {
+      this.applicant.medicalDetails = data;
+    }
+    if (this.router.url.includes('applicant/review-details')) {
+      this.applicant.applicantPlan = data;
+    }
     sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
   }
 }

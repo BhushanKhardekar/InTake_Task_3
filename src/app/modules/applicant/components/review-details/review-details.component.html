@@ -5,27 +5,31 @@
         <div class="row pb-5" *ngFor="let data of availablePlans; index as i">
           <table style="border: 1px solid black">
             <tbody class="p-2">
-              <input class="form-check-input" name="flexRadioDefault" (click)="onRadioClick(i)" type="radio" />
-              <tr>
-                <th>CarrierName</th>
-                <td>{{ data.CarrierName }}</td>
-              </tr>
-              <tr>
-                <th>MaximumCoverage</th>
-                <td>{{ data.CarrierDetails.MaximumCoverage }}</td>
-              </tr>
-              <tr>
-                <th>MinimumCoverage</th>
-                <td>{{ data.CarrierDetails.MinimumCoverage }}</td>
-              </tr>
-              <tr>
-                <th>Premium</th>
-                <td>{{ data.CarrierDetails.Premium }}</td>
-              </tr>
-              <tr>
-                <th>Term</th>
-                <td>{{ data.CarrierDetails.Term }}</td>
-              </tr>
+              <div class="d-flex justify-content-end">
+                <input class="form-check-input" name="flexRadioDefault" (click)="onRadioClick(i)" type="radio" />
+              </div>
+              <div>
+                <tr>
+                  <th>CarrierName</th>
+                  <td>{{ data.CarrierName }}</td>
+                </tr>
+                <tr>
+                  <th>MaximumCoverage</th>
+                  <td>{{ data.CarrierDetails.MaximumCoverage }}</td>
+                </tr>
+                <tr>
+                  <th>MinimumCoverage</th>
+                  <td>{{ data.CarrierDetails.MinimumCoverage }}</td>
+                </tr>
+                <tr>
+                  <th>Premium</th>
+                  <td>{{ data.CarrierDetails.Premium }}</td>
+                </tr>
+                <tr>
+                  <th>Term</th>
+                  <td>{{ data.CarrierDetails.Term }}</td>
+                </tr>
+              </div>
             </tbody>
           </table>
         </div>
@@ -43,12 +47,16 @@
               Gender : {{ applicantData.Gender }}<br />
               Date Of Birth : {{ applicantData.DateOfBirth }}<br />
               Age : {{ applicantData.Age }}<br /><br />
+
+
               <!-- MaritalStatus : {{ applicantData.MaritalStatus }}<br />
               <h6>Spouse Details</h6>
               FullName : {{ applicantData.SpouseFullName }}<br />
               Gender : {{ applicantData.SpouseGender }}<br />
               Date Of Birth :{{ applicantData.SpouseDateOfBirth }}<br />
               Age : {{ applicantData.SpouseAge }}<br /> -->
+
+
               <h6>Address Deatils</h6>
               StreetAddress : {{ applicantData.StreetAddress }}<br />
               Country : {{ applicantData.Country }}<br />

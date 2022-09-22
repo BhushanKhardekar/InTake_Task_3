@@ -86,7 +86,7 @@ export class ReviewDetailsComponent implements OnInit {
       Premium: this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
       Term: this.availablePlans[this.selectedPlanId].CarrierDetails.Term
     };
-    this._applicantService.setSessionStoragePlan(obj);
+    this._applicantService.setValueToModel(obj);
     this._router.navigate(['/applicant/payment']);
   }
 

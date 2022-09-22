@@ -112,7 +112,7 @@ export class MedicalDetailsComponent implements OnInit {
     this.checkBoxGroup = true;
     if (this.isSmoke || this.isAlcohol || this.isOtherInfo) {
       if (this.applicantMedicalForm.valid) {
-        this._applicantService.setSessionStorageMedical(data)
+        this._applicantService.setValueToModel(data)
         this._toastr.success("Data Saved");
         this._router.navigate(['/applicant/review-details']);
       }
@@ -247,6 +247,7 @@ export class MedicalDetailsComponent implements OnInit {
     if (val) {
       this.isAlcohol = true;
       this.applicantMedicalForm.controls['Alcohol'].setValidators([Validators.required]);
+      this.applicantMedicalForm.controls['Alcohol'].updateValueAndValidity();
     }
     else {
       this.isAlcohol = false;
@@ -259,6 +260,7 @@ export class MedicalDetailsComponent implements OnInit {
     if (val) {
       this.isOtherInfo = true;
       this.applicantMedicalForm.controls['OtherInfo'].setValidators([Validators.required]);
+      this.applicantMedicalForm.controls['OtherInfo'].updateValueAndValidity();
     }
     else {
       this.isOtherInfo = false;
