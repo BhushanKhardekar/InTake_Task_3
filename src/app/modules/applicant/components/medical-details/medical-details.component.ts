@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { CheckBoxType } from '../../config/checkBoxType.enum';
 import { ApplicantService } from '../../services/applicant.service';
+import { CheckBoxType } from '../../config/checkBoxType.enum';
 
 @Component({
   selector: 'app-medical-details',
   templateUrl: './medical-details.component.html',
   styleUrls: ['./medical-details.component.css'],
 })
-export class MedicalDetailsComponent implements OnInit {
 
+export class MedicalDetailsComponent implements OnInit {
   //variables
   check_box_type = CheckBoxType;
   currentlyChecked = CheckBoxType.None;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { constVal } from '../../config/constVal.obj';
@@ -10,9 +10,8 @@ import { ApplicantService } from '../../services/applicant.service';
   templateUrl: './review-details.component.html',
   styleUrls: ['./review-details.component.css']
 })
+
 export class ReviewDetailsComponent implements OnInit {
-
-
   insuranceForm: any;
   applicantReviewForm: any;
   isSuccess: any;
@@ -32,14 +31,14 @@ export class ReviewDetailsComponent implements OnInit {
   isSmoke: any;
   isAlcohol: any;
   isOther: any;
+  reviewForm: any;
 
   constructor(
     private _router: Router,
     private _applicantService: ApplicantService,
     private fb: FormBuilder,
     private _toastr: ToastrService,
-    private _constant : constVal
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this._applicantService.getApplicantData();
@@ -73,15 +72,20 @@ export class ReviewDetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    let obj = {
-      CarrierName: this.availablePlans[this.selectedPlanId].CarrierName,
-      MaximumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MaximumCoverage,
-      MinimumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MinimumCoverage,
-      Premium: this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
-      Term: this.availablePlans[this.selectedPlanId].CarrierDetails.Term
-    };
-    this._applicantService.setValueToModel(obj);
-    this._router.navigate(['/applicant/payment']);
+    if (this.reviewForm.valid) {
+      let obj = {
+        CarrierName: this.availablePlans[this.selectedPlanId].CarrierName,
+        MaximumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MaximumCoverage,
+        MinimumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MinimumCoverage,
+        Premium: this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
+        Term: this.availablePlans[this.selectedPlanId].CarrierDetails.Term
+      };
+      this._applicantService.setValueToModel(obj);
+      this._router.navigate(['/applicant/payment']);
+    }
+    else {
+      this._toastr.error("Select plan")
+    }
   }
 
   initFormData() {
@@ -91,13 +95,16 @@ export class ReviewDetailsComponent implements OnInit {
       this.applicantData = this.applicant.applicantDetails
       this.applicantMedicalData = this.applicant.medicalDetails
     }
+    this.reviewForm = this.fb.group({
+      plan: ['', Validators.required]
+    })
     this.getJson();
   }
 
-  getInfo(){
+  getInfo() {
     this.isSmoke = this._applicantService.applicant.medicalDetails.checkSmoke;
-    this.isAlcohol =this._applicantService.applicant.medicalDetails.checkAlcohol;
-    this.isOther =this._applicantService.applicant.medicalDetails.checkOtherInfo;
+    this.isAlcohol = this._applicantService.applicant.medicalDetails.checkAlcohol;
+    this.isOther = this._applicantService.applicant.medicalDetails.checkOtherInfo;
   }
 
   checkInsuranceFor() {
