@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { ApplicantService } from '../../services/applicant.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class PaymentComponent implements OnInit {
   applicantDetails:any
   medicalDetails:any
   applicantPlan:any
-  constructor(private fb: FormBuilder, private _applicantService: ApplicantService) { }
+  constructor(private fb: FormBuilder, private _applicantService: ApplicantService,private _toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getInfo();
@@ -35,6 +36,12 @@ export class PaymentComponent implements OnInit {
     this.applicantPlan= this._applicantService.applicant.applicantPlan
   }
   onSubmit(data: any) {
-    console.log(data);
+
+    if(this.cardFrom.valid){
+      this._toastr.success("Payment Successed");
+    }
+    else{
+      this._toastr.error("Please enter card details");
+    }
   }
 }

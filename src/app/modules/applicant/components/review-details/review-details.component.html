@@ -1,12 +1,13 @@
 <div class="container">
-  <form #form="ngForm"[formGroup]="reviewForm">
+  <form #form="ngForm" [formGroup]="reviewForm">
     <div class="row">
       <div class="col-4">
         <div class="row pb-5" *ngFor="let data of availablePlans; index as i">
           <table style="border: 1px solid black">
             <tbody class="p-2">
               <div class="d-flex justify-content-end">
-                <input class="form-check-input" [value]="i" formControlName="plan" (click)="onRadioClick(i)" type="radio" />
+                <input class="form-check-input" [value]="i" formControlName="plan" (click)="onRadioClick(i)"
+                  type="radio" />
               </div>
               <div>
                 <tr>
@@ -79,11 +80,11 @@
                 Do you have Asthama : {{ applicantMedicalData.AsthamaText }}<br />
               </div>
               <div *ngIf="isAlcohol">
-              Do you drink Alcohol : {{ applicantMedicalData.Alcohol }}<br />
-            </div>
-            <div *ngIf="isOther">
-              Other HealfInfo : {{ applicantMedicalData.OtherInfo }}
-            </div>
+                Do you drink Alcohol : {{ applicantMedicalData.Alcohol }}<br />
+              </div>
+              <div *ngIf="isOther">
+                Other HealfInfo : {{ applicantMedicalData.OtherInfo }}
+              </div>
             </div>
             <div class="pt-3">
               <button class="btn btn-outline-primary" type="button" routerLink="/applicant/medical-details">
