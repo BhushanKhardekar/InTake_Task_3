@@ -3,15 +3,15 @@ export class ApplicantMedicalDetails{
   public checkSpouse:any;
   public checkOthers:any;
 
-  public FullName:any
-  public Gender:any
-  public DateOfBirth:any
-  public Age:any
+  public fullName:any
+  public gender:any
+  public dateOfBirth:any
+  public age:any
 
-  public SmokeText: any
-  public AsthamaText: any
-  public Alcohol: any
-  public OtherInfo: any
+  public smokeText: any
+  public asthamaText: any
+  public alcohol: any
+  public otherInfo: any
 
   public checkSmoke: any
   public checkAlcohol: any

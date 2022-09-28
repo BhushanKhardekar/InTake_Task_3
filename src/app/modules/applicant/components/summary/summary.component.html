@@ -2,29 +2,29 @@
   <div class="row">
     <div>
       <h5>Applicant</h5>
-      Full Name : {{applicantDetails.FullName}} <br>
-      Phone Number : {{applicantDetails.PhoneNumber}}<br>
+      Full Name : {{applicantDetails.fullName}} <br>
+      Phone Number : {{applicantDetails.phoneNumber}}<br>
 
       <h5>Insurance For</h5>
-      Full Name : {{medicalDetails.FullName}} <br>
-      Date Of Birth : {{medicalDetails.DateOfBirth}} <br>
+      Full Name : {{medicalDetails.fullName}} <br>
+      Date Of Birth : {{medicalDetails.dateOfBirth}} <br>
       <h6>Medical Details</h6>
 
       <div *ngIf=medicalDetails.checkSmoke>
-        Do You Smoke : {{medicalDetails.SmokeText}}<br>
-        Do you Have Asthama : {{medicalDetails.AsthamaText}}<br>
+        Do You Smoke : {{medicalDetails.smokeText}}<br>
+        Do you Have Asthama : {{medicalDetails.asthamaText}}<br>
       </div>
 
       <div *ngIf=medicalDetails.checkAlcohol>
-        Do you drink Alcohol : {{medicalDetails.Alcohol}}<br>
+        Do you drink Alcohol : {{medicalDetails.alcohol}}<br>
       </div>
       <div *ngIf=medicalDetails.checkOtherInfo>
-        Other heath Information : {{medicalDetails.OtherInfo}} <br>
+        Other heath Information : {{medicalDetails.otherInfo}} <br>
       </div>
       <h6>Insurance Seleted</h6>
       <div>
-        Carrier Name : {{applicantPlan.CarrierName}} <br>
-        Premium : {{applicantPlan.Premium}}
+        Carrier Name : {{applicantPlan.carrierName}} <br>
+        Premium : {{applicantPlan.premium}}
       </div>
     </div>
   </div>

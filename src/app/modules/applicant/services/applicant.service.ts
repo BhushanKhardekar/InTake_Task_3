@@ -1,7 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { Applicant } from '../models/applicant.model';
+import { linkUrl } from '../config/url.config'
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +10,16 @@ import { Applicant } from '../models/applicant.model';
 export class ApplicantService {
   maxDate: any;
   minDate: any;
+  applicationJson: any;
+  inComingData:any;
+
+
   public applicant: Applicant = new Applicant();
 
-  constructor(private _toastr: ToastrService, private router: Router) {
-    this.futureDate();
-  }
+  constructor(
+    private router: Router,
+    private _http: HttpClient
+  ) { this.futureDate(); }
 
   futureDate() {
     var date: any = new Date();
@@ -30,13 +36,27 @@ export class ApplicantService {
     this.minDate = '1900-01-01';
   }
 
-  getApplicantData() {
-    let applicantData: any = sessionStorage.getItem('applicant');
-    if (applicantData) {
-      this.applicant = JSON.parse(applicantData);
-    }
+  getDataFromApi() {
+    this.getApplicantData().subscribe((res: any) => {
+       let data = res.resultObject;
+      if (res.isSucess) {
+        this.inComingData = JSON.parse(data);
+        this.applicant = this.inComingData
+      }
+    })
   }
 
+
+  //Get
+  getApplicantData() {
+    return this._http.get(linkUrl.get_data_url);
+  }
+
+  getAvailableList() {
+    return this._http.get(linkUrl.get_list_url);
+  }
+
+  //post
   setValueToModel(data?: any) {
     if (this.router.url.includes('applicant/applicant-details')) {
       this.applicant.applicantDetails = data;
@@ -47,6 +67,8 @@ export class ApplicantService {
     if (this.router.url.includes('applicant/review-details')) {
       this.applicant.applicantPlan = data;
     }
-    sessionStorage.setItem('applicant', JSON.stringify(this.applicant));
+    this.applicationJson = JSON.stringify(this.applicant);
+    let obj = { 'applicationJson': this.applicationJson }
+    return this._http.post(linkUrl.post_data_url, obj);
   }
 }

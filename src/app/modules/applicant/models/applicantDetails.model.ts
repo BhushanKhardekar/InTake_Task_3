@@ -1,20 +1,20 @@
 export class ApplicantDetails{
-  public FullName:any
-  public PhoneNumber:any
-  public Email:any
-  public Gender:any
-  public DateOfBirth:any
-  public Age:any
-  public MaritalStatus:any
+  public fullName:any
+  public phoneNumber:any
+  public email:any
+  public gender:any
+  public dateOfBirth:any
+  public age:any
+  public maritalStatus:any
 
-  public SpouseFullName:any
-  public SpouseGender:any
-  public SpouseDateOfBirth:any
-  public SpouseAge:any
+  public spouseFullName:any
+  public spouseGender:any
+  public spouseDateOfBirth:any
+  public spouseAge:any
 
-  public StreetAddress: any
-  public City: any
-  public State: any
-  public ZipCode: any
-  public Country: any
+  public streetAddress: any
+  public city: any
+  public state: any
+  public zipCode: any
+  public country: any
  }

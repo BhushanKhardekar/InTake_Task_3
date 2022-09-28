@@ -28,44 +28,44 @@
       <div class="row pb-3">
         <div class="col-6">
           <label for="FullName" class="form-label">Full Name</label>
-          <input type="text" class="form-control" formControlName="FullName" [attr.readonly]="
+          <input type="text" class="form-control" formControlName="fullName" [attr.readonly]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
-              (f.FullName && f.FullName.invalid && f.FullName.touched) ||
-              (f.FullName && f.FullName.invalid && formSubmitted)
+              (f.fullName && f.fullName.invalid && f.fullName.touched) ||
+              (f.fullName && f.fullName.invalid && formSubmitted)
             ">
             Required</span>
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Gender</label>
-          <input type="text" class="form-control" formControlName="Gender" [attr.readonly]="
+          <input type="text" class="form-control" formControlName="gender" [attr.readonly]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
-              (f.Gender && f.Gender.invalid && f.Gender.touched) ||
-              (f.Gender && f.Gender.invalid && formSubmitted)
+              (f.gender && f.gender.invalid && f.gender.touched) ||
+              (f.gender && f.gender.invalid && formSubmitted)
             ">
             Required</span>
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">DateOfBirth</label>
           <input type="date" max="{{ this.maxDate }}" (change)="ageCalculatorApplicant($event)" class="form-control"
-            formControlName="DateOfBirth" [attr.readonly]="
+            formControlName="dateOfBirth" [attr.readonly]="
               isApplicantSelected || isSpouseSelected || isOtherSelected
             " />
           <span style="color: red" *ngIf="
-              (f.DateOfBirth && f.DateOfBirth.invalid && f.DateOfBirth.touched) ||
-              (f.DateOfBirth && f.DateOfBirth.invalid && formSubmitted)
+              (f.dateOfBirth && f.dateOfBirth.invalid && f.dateOfBirth.touched) ||
+              (f.dateOfBirth && f.dateOfBirth.invalid && formSubmitted)
             ">
             Required</span>
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Age</label>
-          <input type="text" class="form-control" formControlName="Age" readonly>
+          <input type="text" class="form-control" formControlName="age" readonly>
           <span style="color: red" *ngIf="
-          (f.Age && f.Age.invalid && f.Age.touched) ||
-          (f.Age && f.Age.invalid && formSubmitted)
+          (f.age && f.age.invalid && f.age.touched) ||
+          (f.age && f.age.invalid && formSubmitted)
         ">
             Required</span>
         </div>
@@ -85,18 +85,18 @@
             <div class="col-8">
               <div *ngIf="isSmoke">
                 <label class="form-label">Do you smkoke?</label>
-                <input type="text" class="form-control" formControlName="SmokeText" />
+                <input type="text" class="form-control" formControlName="smokeText" />
                 <span style="color: red" *ngIf="
-                (f.SmokeText && f.SmokeText.invalid && f.SmokeText.touched) ||
-                    (f.SmokeText && f.SmokeText.invalid && formSubmitted)">
+                (f.smokeText && f.smokeText.invalid && f.smokeText.touched) ||
+                    (f.smokeText && f.smokeText.invalid && formSubmitted)">
                   Required</span>
               </div>
               <div *ngIf="isSmoke">
                 <label class="form-label">Do you have Asthama?</label>
-                <input type="text" class="form-control" formControlName="AsthamaText" />
+                <input type="text" class="form-control" formControlName="asthamaText" />
                 <span style="color: red" *ngIf="
-                    (f.AsthamaText && f.AsthamaText.invalid && f.AsthamaText.touched) ||
-                    (f.AsthamaText && f.AsthamaText.invalid && formSubmitted)">
+                    (f.asthamaText && f.asthamaText.invalid && f.asthamaText.touched) ||
+                    (f.asthamaText && f.asthamaText.invalid && formSubmitted)">
                   Required</span>
               </div>
             </div>
@@ -112,10 +112,10 @@
             <div class="col-8">
               <div *ngIf="isAlcohol">
                 <label class="form-label">Do you drink Alcohol?</label>
-                <input type="text" class="form-control" formControlName="Alcohol" />
+                <input type="text" class="form-control" formControlName="alcohol" />
                 <span style="color: red" *ngIf="
-                    (f.Alcohol && f.Alcohol.invalid && f.Alcohol.touched) ||
-                    (f.Alcohol && f.Alcohol.invalid && formSubmitted)
+                    (f.alcohol && f.alcohol.invalid && f.alcohol.touched) ||
+                    (f.alcohol && f.alcohol.invalid && formSubmitted)
                   ">
                   Required</span>
               </div>
@@ -133,11 +133,11 @@
             <div class="col-8">
               <div *ngIf="isOtherInfo">
                 <label class="form-label">Mention</label>
-                <textarea class="form-control" formControlName="OtherInfo" rows="3"></textarea>
+                <textarea class="form-control" formControlName="otherInfo" rows="3"></textarea>
                 <span style="color: red" *ngIf="
 
-                (f.OtherInfo && f.OtherInfo.invalid && f.OtherInfo.touched) ||
-                    (f.OtherInfo && f.OtherInfo.invalid && formSubmitted)
+                (f.otherInfo && f.otherInfo.invalid && f.otherInfo.touched) ||
+                    (f.otherInfo && f.otherInfo.invalid && formSubmitted)
                   ">
                   Required</span>
               </div>
@@ -159,11 +159,3 @@
     </div>
   </div>
 </div>
-<!--
-  ((f.checkSmoke && f.checkSmoke.invalid && f.checkSmoke.touched) ||
-        (f.checkSmoke && f.checkSmoke.invalid && formSubmitted)) ||
-        ((f.checkAlcohol && f.checkAlcohol.invalid && f.checkAlcohol.touched) ||
-        (f.checkAlcohol && f.checkAlcohol.invalid && formSubmitted)) ||
-        ((f.checkOtherInfo && f.checkOtherInfo.invalid && f.checkOtherInfo.touched) ||
-        (f.checkOtherInfo && f.checkOtherInfo.invalid && formSubmitted)) ||
- -->

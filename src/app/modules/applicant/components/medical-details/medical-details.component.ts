@@ -52,7 +52,6 @@ export class MedicalDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.minDate = this._applicantService.minDate;
     this.maxDate = this._applicantService.maxDate;
-    this._applicantService.getApplicantData();
     this.initMedicalFrom();
     this.onLoadCheckData();
   }
@@ -63,14 +62,14 @@ export class MedicalDetailsComponent implements OnInit {
       checkApplicant: [],
       checkSpouse: [],
       checkOthers: [],
-      FullName: [this._applicantService.applicant.medicalDetails.FullName, Validators.required],
-      Gender: [this._applicantService.applicant.medicalDetails.Gender, Validators.required],
-      DateOfBirth: [this._applicantService.applicant.medicalDetails.DateOfBirth, Validators.required],
-      Age: [this._applicantService.applicant.medicalDetails.Age, Validators.required],
-      SmokeText: [this._applicantService.applicant.medicalDetails.SmokeText],
-      AsthamaText: [this._applicantService.applicant.medicalDetails.AsthamaText],
-      Alcohol: [this._applicantService.applicant.medicalDetails.Alcohol],
-      OtherInfo: [this._applicantService.applicant.medicalDetails.OtherInfo],
+      fullName: [this._applicantService.applicant.medicalDetails.fullName, Validators.required],
+      gender: [this._applicantService.applicant.medicalDetails.gender, Validators.required],
+      dateOfBirth: [this._applicantService.applicant.medicalDetails.dateOfBirth, Validators.required],
+      age: [this._applicantService.applicant.medicalDetails.age, Validators.required],
+      smokeText: [this._applicantService.applicant.medicalDetails.smokeText],
+      asthamaText: [this._applicantService.applicant.medicalDetails.asthamaText],
+      alcohol: [this._applicantService.applicant.medicalDetails.alcohol],
+      otherInfo: [this._applicantService.applicant.medicalDetails.otherInfo],
       checkSmoke: [this._applicantService.applicant.medicalDetails.checkSmoke],
       checkAlcohol: [this._applicantService.applicant.medicalDetails.checkAlcohol],
       checkOtherInfo: [this._applicantService.applicant.medicalDetails.checkOtherInfo]
@@ -84,7 +83,7 @@ export class MedicalDetailsComponent implements OnInit {
     this.onLoadSmokeCheck(this.checkBoxSmoke);
     this.onLoadAlcoholCheck(this.checkBoxAlcohol);
     this.onLoadOtherInfoCheck(this.checkBoxOtherInfo);
-    if (this._applicantService.applicant.applicantDetails.MaritalStatus == 'Married') {
+    if (this._applicantService.applicant.applicantDetails.maritalStatus == 'Married') {
       this.isMarried = true;
     }
     else {
@@ -105,7 +104,9 @@ export class MedicalDetailsComponent implements OnInit {
     this.checkBoxGroup = true;
     if (this.isSmoke || this.isAlcohol || this.isOtherInfo) {
       if (this.applicantMedicalForm.valid) {
-        this._applicantService.setValueToModel(data)
+        this._applicantService.setValueToModel(data).subscribe((res)=>{
+
+        });
         this._toastr.success("Data Saved");
         this._router.navigate(['/applicant/review-details']);
       }
@@ -130,7 +131,7 @@ export class MedicalDetailsComponent implements OnInit {
       const convertAge = new Date(age);
       const timeDiff = Math.abs(Date.now() - convertAge.getTime());
       this.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
-      this.applicantMedicalForm.patchValue({ Age: this.age });
+      this.applicantMedicalForm.patchValue({ age: this.age });
       this.currentAge = true;
     } else {
       return;
@@ -158,13 +159,13 @@ export class MedicalDetailsComponent implements OnInit {
   //OnloadCheckBox
   onLoadApplicant(val: any) {
     if (val) {
-      this.applicantMedicalForm.patchValue({
-        FullName: this._applicantService.applicant.applicantDetails.FullName,
-        Gender: this._applicantService.applicant.applicantDetails.Gender,
-        DateOfBirth: this._applicantService.applicant.applicantDetails.DateOfBirth,
-        Age: this._applicantService.applicant.applicantDetails.Age,
-      });
       this.isApplicantSelected = true;
+      this.applicantMedicalForm.patchValue({
+        fullName: this._applicantService.applicant.applicantDetails.fullName,
+        gender: this._applicantService.applicant.applicantDetails.gender,
+        dateOfBirth: this._applicantService.applicant.applicantDetails.dateOfBirth,
+        age: this._applicantService.applicant.applicantDetails.age,
+      });
     }
     else {
       this.isApplicantSelected = null;
@@ -174,10 +175,10 @@ export class MedicalDetailsComponent implements OnInit {
   onloadSpouse(val: any) {
     if (val) {
       this.applicantMedicalForm.patchValue({
-        FullName: this._applicantService.applicant.applicantDetails.SpouseFullName,
-        Gender: this._applicantService.applicant.applicantDetails.SpouseGender,
-        DateOfBirth: this._applicantService.applicant.applicantDetails.SpouseDateOfBirth,
-        Age: this._applicantService.applicant.applicantDetails.SpouseAge,
+        fullName: this._applicantService.applicant.applicantDetails.spouseFullName,
+        gender: this._applicantService.applicant.applicantDetails.spouseGender,
+        dateOfBirth: this._applicantService.applicant.applicantDetails.spouseDateOfBirth,
+        age: this._applicantService.applicant.applicantDetails.spouseAge,
       });
       this.isSpouseSelected = true;
     } else {
@@ -195,10 +196,10 @@ export class MedicalDetailsComponent implements OnInit {
   }
   defaultPatchForm() {
     this.applicantMedicalForm.patchValue({
-      FullName: '',
-      Gender: '',
-      DateOfBirth: '',
-      Age: ''
+      fullName: '',
+      gender: '',
+      dateOfBirth: '',
+      age: ''
     });
   }
 
@@ -220,46 +221,46 @@ export class MedicalDetailsComponent implements OnInit {
   onLoadSmokeCheck(val: any) {
     if (val) {
       this.isSmoke = true;
-      this.applicantMedicalForm.controls['SmokeText'].setValidators(Validators.required);
-      this.applicantMedicalForm.controls['SmokeText'].updateValueAndValidity();
-      this.applicantMedicalForm.controls['AsthamaText'].setValidators(Validators.required);
-      this.applicantMedicalForm.controls['AsthamaText'].updateValueAndValidity();
+      this.applicantMedicalForm.controls['smokeText'].setValidators(Validators.required);
+      this.applicantMedicalForm.controls['smokeText'].updateValueAndValidity();
+      this.applicantMedicalForm.controls['asthamaText'].setValidators(Validators.required);
+      this.applicantMedicalForm.controls['asthamaText'].updateValueAndValidity();
     }
     else {
       this.isSmoke = false;
-      this.applicantMedicalForm.controls["SmokeText"].setValue(null);
-      this.applicantMedicalForm.controls["SmokeText"].setValidators([Validators.nullValidator]);
-      this.applicantMedicalForm.controls['SmokeText'].updateValueAndValidity();
-      this.applicantMedicalForm.controls["AsthamaText"].setValue(null);
-      this.applicantMedicalForm.controls["AsthamaText"].setValidators([Validators.nullValidator]);
-      this.applicantMedicalForm.controls['AsthamaText'].updateValueAndValidity();
+      this.applicantMedicalForm.controls["smokeText"].setValue(null);
+      this.applicantMedicalForm.controls["smokeText"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['smokeText'].updateValueAndValidity();
+      this.applicantMedicalForm.controls["asthamaText"].setValue(null);
+      this.applicantMedicalForm.controls["asthamaText"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['asthamaText'].updateValueAndValidity();
 
     }
   }
   onLoadAlcoholCheck(val: any) {
     if (val) {
       this.isAlcohol = true;
-      this.applicantMedicalForm.controls['Alcohol'].setValidators([Validators.required]);
-      this.applicantMedicalForm.controls['Alcohol'].updateValueAndValidity();
+      this.applicantMedicalForm.controls['alcohol'].setValidators([Validators.required]);
+      this.applicantMedicalForm.controls['alcohol'].updateValueAndValidity();
     }
     else {
       this.isAlcohol = false;
-      this.applicantMedicalForm.controls["Alcohol"].setValue(null);
-      this.applicantMedicalForm.controls["Alcohol"].setValidators([Validators.nullValidator]);
-      this.applicantMedicalForm.controls['Alcohol'].updateValueAndValidity();
+      this.applicantMedicalForm.controls["alcohol"].setValue(null);
+      this.applicantMedicalForm.controls["alcohol"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['alcohol'].updateValueAndValidity();
     }
   }
   onLoadOtherInfoCheck(val: any) {
     if (val) {
       this.isOtherInfo = true;
-      this.applicantMedicalForm.controls['OtherInfo'].setValidators([Validators.required]);
-      this.applicantMedicalForm.controls['OtherInfo'].updateValueAndValidity();
+      this.applicantMedicalForm.controls['otherInfo'].setValidators([Validators.required]);
+      this.applicantMedicalForm.controls['otherInfo'].updateValueAndValidity();
     }
     else {
       this.isOtherInfo = false;
-      this.applicantMedicalForm.controls["OtherInfo"].setValue(null);
-      this.applicantMedicalForm.controls["OtherInfo"].setValidators([Validators.nullValidator]);
-      this.applicantMedicalForm.controls['OtherInfo'].updateValueAndValidity();
+      this.applicantMedicalForm.controls["otherInfo"].setValue(null);
+      this.applicantMedicalForm.controls["otherInfo"].setValidators([Validators.nullValidator]);
+      this.applicantMedicalForm.controls['otherInfo'].updateValueAndValidity();
     }
   }
 }

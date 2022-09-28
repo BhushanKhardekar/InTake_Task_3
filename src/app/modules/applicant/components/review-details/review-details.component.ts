@@ -41,30 +41,46 @@ export class ReviewDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._applicantService.getApplicantData();
-    this.initFormData();
     this.getInfo();
+    this.initFormData();
     this.checkInsuranceFor();
   }
+  initFormData() {
+    let data: any;
+    this._applicantService.getApplicantData().subscribe((res:any) => {
+      data = res.resultObject;
+      if (data) {
+        this.applicant = JSON.parse(data);
+        this.applicantData = this.applicant.applicantDetails
+        this.applicantMedicalData = this.applicant.medicalDetails
+      }
+    });
 
+    this.reviewForm = this.fb.group({
+      plan: ['', Validators.required]
+    })
+    this.getJson();
+  }
   getJson() {
-    this.isSuccess = constVal.staticincomingJson.isSuccess;
-    this.responseValue = JSON.parse(constVal.staticincomingJson.responseValue);
-    this.healthInsuranceDetails = this.responseValue.healthInsuranceDetails;
-    this.countrySelected = this._applicantService.applicant.applicantDetails.Country;
+    this._applicantService.getAvailableList().subscribe((res:any)=>{
+      let obj = res;
+      this.responseValue = JSON.parse(res.responseValue);
+        this.healthInsuranceDetails = this.responseValue.healthInsuranceDetails;
+        this.countrySelected = this._applicantService.applicant.applicantDetails.country;
 
-    for (let i = 0; i < this.healthInsuranceDetails.length; i++) {
-      if (this.countrySelected == "US") {
-        if (this.healthInsuranceDetails[i].IsAvailableInUS == 'Yes') {
-          this.availablePlans.push(this.healthInsuranceDetails[i]);
+        for (let i = 0; i < this.healthInsuranceDetails.length; i++) {
+          if (this.countrySelected == "US") {
+            if (this.healthInsuranceDetails[i].IsAvailableInUS == 'Yes') {
+              this.availablePlans.push(this.healthInsuranceDetails[i]);
+            }
+          }
+          if (this.countrySelected == "CN") {
+            if (this.healthInsuranceDetails[i].IsAvailableInCA == 'Yes') {
+              this.availablePlans.push(this.healthInsuranceDetails[i]);
+            }
+          }
         }
-      }
-      if (this.countrySelected == "CN") {
-        if (this.healthInsuranceDetails[i].IsAvailableInCA == 'Yes') {
-          this.availablePlans.push(this.healthInsuranceDetails[i]);
-        }
-      }
-    }
+    });
   }
 
   onRadioClick(val: any) {
@@ -74,13 +90,13 @@ export class ReviewDetailsComponent implements OnInit {
   onSubmit() {
     if (this.reviewForm.valid) {
       let obj = {
-        CarrierName: this.availablePlans[this.selectedPlanId].CarrierName,
-        MaximumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MaximumCoverage,
-        MinimumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MinimumCoverage,
-        Premium: this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
-        Term: this.availablePlans[this.selectedPlanId].CarrierDetails.Term
+        carrierName: this.availablePlans[this.selectedPlanId].CarrierName,
+        maximumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MaximumCoverage,
+        minimumCoverage: this.availablePlans[this.selectedPlanId].CarrierDetails.MinimumCoverage,
+        premium: this.availablePlans[this.selectedPlanId].CarrierDetails.Premium,
+        term: this.availablePlans[this.selectedPlanId].CarrierDetails.Term
       };
-      this._applicantService.setValueToModel(obj);
+      this._applicantService.setValueToModel(obj).subscribe((res) => { });
       this._router.navigate(['/applicant/payment']);
     }
     else {
@@ -88,18 +104,7 @@ export class ReviewDetailsComponent implements OnInit {
     }
   }
 
-  initFormData() {
-    let data: any = sessionStorage.getItem('applicant');
-    if (data) {
-      this.applicant = JSON.parse(data);
-      this.applicantData = this.applicant.applicantDetails
-      this.applicantMedicalData = this.applicant.medicalDetails
-    }
-    this.reviewForm = this.fb.group({
-      plan: ['', Validators.required]
-    })
-    this.getJson();
-  }
+
 
   getInfo() {
     this.isSmoke = this._applicantService.applicant.medicalDetails.checkSmoke;
@@ -108,13 +113,13 @@ export class ReviewDetailsComponent implements OnInit {
   }
 
   checkInsuranceFor() {
-    if (this.applicantMedicalData.checkApplicant) {
+    if (this.applicantMedicalData?.checkApplicant) {
       this.checkApplicant = true;
     }
-    else if (this.applicantMedicalData.checkSpouse) {
+    else if (this.applicantMedicalData?.checkSpouse) {
       this.checkSpouse = true;
     }
-    else if (this.applicantMedicalData.checkOtherInfo) {
+    else if (this.applicantMedicalData?.checkOtherInfo) {
       this.checkOtherInfo = true;
     }
     else {

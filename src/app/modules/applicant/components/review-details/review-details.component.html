@@ -42,24 +42,19 @@
           <div class="col">
             <div>
               <h4>Applicant Details</h4>
-              Full Name : {{ applicantData.FullName }} <br />
-              Phone Number : {{ applicantData.PhoneNumber }}<br />
-              Email : {{ applicantData.Email }}<br />
-              Gender : {{ applicantData.Gender }}<br />
-              Date Of Birth : {{ applicantData.DateOfBirth }}<br />
-              Age : {{ applicantData.Age }}<br /><br />
-              <!-- MaritalStatus : {{ applicantData.MaritalStatus }}<br />
-              <h6>Spouse Details</h6>
-              FullName : {{ applicantData.SpouseFullName }}<br />
-              Gender : {{ applicantData.SpouseGender }}<br />
-              Date Of Birth :{{ applicantData.SpouseDateOfBirth }}<br />
-              Age : {{ applicantData.SpouseAge }}<br /> -->
+              Full Name : {{ applicantData?.fullName }} <br />
+              Phone Number : {{ applicantData?.phoneNumber }}<br />
+              Email : {{ applicantData?.email }}<br />
+              Gender : {{ applicantData?.gender }}<br />
+              Date Of Birth : {{ applicantData?.dateOfBirth }}<br />
+              Age : {{ applicantData?.age }}<br /><br />
+
               <h6>Address Deatils</h6>
-              StreetAddress : {{ applicantData.StreetAddress }}<br />
-              Country : {{ applicantData.Country }}<br />
-              City : {{ applicantData.City }}<br />
-              State : {{ applicantData.State }}<br />
-              ZipCode : {{ applicantData.ZipCode }}<br />
+              StreetAddress : {{ applicantData?.streetAddress }}<br />
+              Country : {{ applicantData?.country }}<br />
+              City : {{ applicantData?.city }}<br />
+              State : {{ applicantData?.state }}<br />
+              ZipCode : {{ applicantData?.zipCode }}<br />
             </div>
             <div class="pt-3">
               <button class="btn btn-outline-primary" type="button" routerLink="/applicant/applicant-details">
@@ -70,20 +65,20 @@
           <div class="col">
             <h3>Medical Details</h3>
             <div>
-              FullName : {{ applicantMedicalData.FullName }}<br />
-              Gender : {{ applicantMedicalData.Gender }}<br />
-              Date Of Birth :{{ applicantMedicalData.DateOfBirth }}<br />
-              Age : {{ applicantMedicalData.Age }}<br /><br />
+              FullName : {{ applicantMedicalData?.fullName }}<br />
+              Gender : {{ applicantMedicalData?.gender }}<br />
+              Date Of Birth :{{ applicantMedicalData?.dateOfBirth }}<br />
+              Age : {{ applicantMedicalData?.age }}<br /><br />
               <h6>Other Health-Info</h6>
               <div *ngIf="isSmoke">
-                Do you smkoke : {{ applicantMedicalData.SmokeText }} <br />
-                Do you have Asthama : {{ applicantMedicalData.AsthamaText }}<br />
+                Do you smkoke : {{ applicantMedicalData?.smokeText }} <br />
+                Do you have Asthama : {{ applicantMedicalData?.asthamaText }}<br />
               </div>
               <div *ngIf="isAlcohol">
-                Do you drink Alcohol : {{ applicantMedicalData.Alcohol }}<br />
+                Do you drink Alcohol : {{ applicantMedicalData?.alcohol }}<br />
               </div>
               <div *ngIf="isOther">
-                Other HealfInfo : {{ applicantMedicalData.OtherInfo }}
+                Other HealfInfo : {{ applicantMedicalData?.otherInfo }}
               </div>
             </div>
             <div class="pt-3">
