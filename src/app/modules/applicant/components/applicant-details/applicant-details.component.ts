@@ -54,10 +54,21 @@ export class ApplicantDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.initApplicantForm();
     this.getDataFromApi();
     this.minDate = this._userService.minDate;
     this.maxDate = this._userService.maxDate;
-    this.initApplicantForm();
+  }
+
+  getDataFromApi() {
+    this._userService.getApplicantData().subscribe((res: any) => {
+       let data = res.resultObject;
+      if (res.isSucess) {
+        this.inComingData = JSON.parse(data);
+        this._userService.applicant= this.inComingData;
+        this.initApplicantForm();
+      }
+    });
   }
 
   initApplicantForm() {
@@ -79,31 +90,24 @@ export class ApplicantDetailsComponent implements OnInit {
       zipCode: [this._userService.applicant.applicantDetails.zipCode, Validators.required],
       country: [this._userService.applicant.applicantDetails.country, Validators.required],
     });
+    this.dataLoad();
+  }
+
+  dataLoad(){
     this.countryCode = this._userService.applicant.applicantDetails.country;
     this.applicantGender = this._userService.applicant.applicantDetails.gender;
     this.applicantAge = this._userService.applicant.applicantDetails.age;
     this.spouseAge = this._userService.applicant.applicantDetails.spouseAge;
     this.marriage = this._userService.applicant.applicantDetails.maritalStatus;
+
     this.onCountryLoad(this.countryCode);
+
     this.onApplicant(this._userService.applicant.applicantDetails.dateOfBirth);
     this.onSpouse(this._userService.applicant.applicantDetails.spouseDateOfBirth);
     this.onMarriage(this._userService.applicant.applicantDetails.maritalStatus);
   }
-
   get f() {
     return this.applicantBasicForm.controls;
-  }
-
-  getDataFromApi() {
-    this._userService.getApplicantData().subscribe((res: any) => {
-       let data = res.resultObject;
-      if (res.isSucess) {
-        this.inComingData = JSON.parse(data);
-        this._userService.applicant.applicantDetails= this.inComingData.applicantDetails;
-        this._userService.applicant.medicalDetails= this.inComingData.medicalDetails;
-        this._userService.applicant.applicantPlan =this.inComingData.applicantPlan;
-      }
-    })
   }
 
   applicantFormInfo(applicantData: any) {

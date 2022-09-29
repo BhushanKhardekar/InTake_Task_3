@@ -25,6 +25,7 @@ export class MedicalDetailsComponent implements OnInit {
   checkBoxSmoke: any;
   checkBoxAlcohol: any;
   checkBoxOtherInfo: any;
+  inComingData:any;
   age: any;
   currentAge: any;
   minDate: any;
@@ -55,7 +56,16 @@ export class MedicalDetailsComponent implements OnInit {
     this.initMedicalFrom();
     this.onLoadCheckData();
   }
-
+  getDataFromApi() {
+    this._applicantService.getApplicantData().subscribe((res: any) => {
+       let data = res.resultObject;
+      if (res.isSucess) {
+        this.inComingData = JSON.parse(data);
+        this._applicantService.applicant= this.inComingData;
+        this.initMedicalFrom();
+      }
+    });
+  }
   //Function
   initMedicalFrom() {
     this.applicantMedicalForm = this._formbuilder.group({
