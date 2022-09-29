@@ -12,7 +12,7 @@ export class ApplicantContainerComponent implements OnInit {
     private _userService: ApplicantService,) { }
 
   ngOnInit(): void {
-    this._userService.getDataFromApi();
+    
   }
 
 }

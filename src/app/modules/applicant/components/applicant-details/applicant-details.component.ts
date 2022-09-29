@@ -13,7 +13,7 @@ import { constVal } from '../../config/constVal.obj';
 
 export class ApplicantDetailsComponent implements OnInit {
   //Variables
-  incomingData: any;
+  inComingData: any;
   applicantBasicForm: any;
   applicantAge: any;
   applicantData: any;
@@ -54,6 +54,7 @@ export class ApplicantDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getDataFromApi();
     this.minDate = this._userService.minDate;
     this.maxDate = this._userService.maxDate;
     this.initApplicantForm();
@@ -91,6 +92,18 @@ export class ApplicantDetailsComponent implements OnInit {
 
   get f() {
     return this.applicantBasicForm.controls;
+  }
+
+  getDataFromApi() {
+    this._userService.getApplicantData().subscribe((res: any) => {
+       let data = res.resultObject;
+      if (res.isSucess) {
+        this.inComingData = JSON.parse(data);
+        this._userService.applicant.applicantDetails= this.inComingData.applicantDetails;
+        this._userService.applicant.medicalDetails= this.inComingData.medicalDetails;
+        this._userService.applicant.applicantPlan =this.inComingData.applicantPlan;
+      }
+    })
   }
 
   applicantFormInfo(applicantData: any) {

@@ -11,8 +11,6 @@ export class ApplicantService {
   maxDate: any;
   minDate: any;
   applicationJson: any;
-  inComingData:any;
-
 
   public applicant: Applicant = new Applicant();
 
@@ -35,17 +33,6 @@ export class ApplicantService {
     this.maxDate = year + '-' + month + '-' + today;
     this.minDate = '1900-01-01';
   }
-
-  getDataFromApi() {
-    this.getApplicantData().subscribe((res: any) => {
-       let data = res.resultObject;
-      if (res.isSucess) {
-        this.inComingData = JSON.parse(data);
-        this.applicant = this.inComingData
-      }
-    })
-  }
-
 
   //Get
   getApplicantData() {
