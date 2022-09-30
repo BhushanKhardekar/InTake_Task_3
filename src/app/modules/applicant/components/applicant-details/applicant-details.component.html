@@ -84,12 +84,6 @@
         <div class="col-6">
           <label for="SpouseFullName" class="form-label">Spouse Full Name</label>
           <input type="text" class="form-control" formControlName="spouseFullName" placeholder="Mark David" />
-          <!-- <span style="color: red" *ngIf="
-              (f.SpouseFullName &&
-                f.SpouseFullName.invalid &&
-                f.SpouseFullName.touched) ||
-              (f.SpouseFullName && f.SpouseFullName.invalid && formSubmitted)
-            ">Required</span> -->
         </div>
         <div class="col-6">
           <label for="Gender" class="form-label">Gender</label>
@@ -99,27 +93,11 @@
               {{ gender.value }}
             </option>
           </select>
-          <!-- <span style="color: red" *ngIf="
-              (f.SpouseGender &&
-                f.SpouseGender.invalid &&
-                f.SpouseGender.touched) ||
-              (f.SpouseGender && f.SpouseGender.invalid && formSubmitted)
-            ">
-            Required</span> -->
         </div>
         <div class="col-6">
           <label for="SpouseDateOfBirth" class="form-label">Spouse DateOfBirth</label>
           <input type="date" class="form-control" formControlName="spouseDateOfBirth"
             (change)="ageCalculatorSpouse($event)" required />
-          <!-- <span style="color: red" *ngIf="
-              (f.SpouseDateOfBirth &&
-                f.SpouseDateOfBirth.invalid &&
-                f.SpouseDateOfBirth.touched) ||
-              (f.SpouseDateOfBirth &&
-                f.SpouseDateOfBirth.invalid &&
-                formSubmitted)
-            ">
-            Required</span> -->
         </div>
         <div class="col-6" *ngIf="this.currentSpouseAge">
           <label for="SpouseAge" class="form-label">Spouse Age</label>
@@ -176,10 +154,8 @@
         </div>
         <div class="col-4">
           <label for="ZipCode" class="form-label">ZipCode</label>
-
-          <!-- [attr.readonly]="fieldReadOnly" -->
-          <input type="text" class="form-control" maxlength="7" [maxlength]="this.maxLen" [minlength]="this.minLen" formControlName="zipCode"
-            (keypress)="onKeyPress($event)" placeholder="543210" />
+          <input type="text" class="form-control" maxlength="7" [maxlength]="this.maxLen" [minlength]="this.minLen"
+            formControlName="zipCode" (keypress)="onKeyPress($event)" placeholder="543210" />
           <span style="color: red" *ngIf="
               (f.zipCode && f.zipCode.invalid && f.zipCode.touched) ||
               (f.zipCode && f.zipCode.invalid && formSubmitted)
