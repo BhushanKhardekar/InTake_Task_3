@@ -197,6 +197,7 @@ export class ApplicantDetailsComponent implements OnInit {
       this.applicantChildForm.controls['childAge'].updateValueAndValidity();
     } else {
       this.isAddChild = false;
+      this.isChild = false;
       this.childNull();
     }
   }
@@ -206,12 +207,12 @@ export class ApplicantDetailsComponent implements OnInit {
   editChild(val: any) {
     console.log(this.childArray[val]);
     this.isChild = true;
-    this.applicantChildAge= true;
+    this.applicantChildAge = true;
     this.applicantChildForm.patchValue({
-      childFullName:this.childArray[val].childFullName,
-      childGender:this.childArray[val].childGender,
-      childAge:this.childArray[val].childAge,
-      childDateOfBirth:this.childArray[val].childDateOfBirth
+      childFullName: this.childArray[val].childFullName,
+      childGender: this.childArray[val].childGender,
+      childAge: this.childArray[val].childAge,
+      childDateOfBirth: this.childArray[val].childDateOfBirth
     });
     this.childArray.splice(val, 1);
   }
@@ -230,7 +231,7 @@ export class ApplicantDetailsComponent implements OnInit {
       this.childArraySize = this.childArraySize - 1;
       this.applicantBasicForm.controls['children'].setValue(this.childArray);
       this.childNull();
-      this.isChild=false;
+      this.isChild = false;
     } else {
       this._toastr.error('Please fill Correct Details');
     }
