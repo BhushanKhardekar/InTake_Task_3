@@ -47,7 +47,6 @@ export class ApplicantService {
   setValueToModel(data?: any) {
     if (this.router.url.includes('applicant/applicant-details')) {
       this.applicant.applicantDetails = data;
-      console.log(this.applicant)
     }
     if (this.router.url.includes('applicant/medical-details')) {
       this.applicant.medicalDetails = data;
