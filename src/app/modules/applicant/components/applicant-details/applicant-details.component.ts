@@ -29,6 +29,7 @@ export class ApplicantDetailsComponent implements OnInit {
   applicantGender: any;
   marriage: any;
   childArraySize: any;
+  childCount: any;
   childArray: any = [];
 
   fieldReadOnly = false;
@@ -116,7 +117,7 @@ export class ApplicantDetailsComponent implements OnInit {
       numberOfChild: [
         this._userService.applicant.applicantDetails.numberOfChild,
       ],
-      children: [''],
+      children: [this._userService.applicant.applicantDetails.children],
       streetAddress: [
         this._userService.applicant.applicantDetails.streetAddress,
         Validators.required,
@@ -161,8 +162,9 @@ export class ApplicantDetailsComponent implements OnInit {
       this._userService.applicant.applicantDetails.spouseDateOfBirth
     );
     this.onMarriage(this._userService.applicant.applicantDetails.maritalStatus);
-    this.childArraySize =
-      this._userService.applicant.applicantDetails.numberOfChild;
+    this.childArraySize = this._userService.applicant.applicantDetails.numberOfChild;
+    this.childCount = this._userService.applicant.applicantDetails.numberOfChild;
+    this.childArray = this._userService.applicant.applicantDetails.children;
   }
 
   get f() {
@@ -172,6 +174,7 @@ export class ApplicantDetailsComponent implements OnInit {
   //ChildInfo
   onChangeChild(event: any) {
     this.childArraySize = event.target.value;
+    this.childCount = event.target.value;
     this.childArray = [];
     if (this.childArraySize > 0) {
       this.isAddChild = true;
@@ -223,15 +226,15 @@ export class ApplicantDetailsComponent implements OnInit {
     this.isChild = false;
   }
   onSaveChild(data: any) {
-    if (
-      this.applicantChildForm.valid ||
-      this.childArray.size == this.childArraySize
-    ) {
+    if (this.applicantChildForm.valid) {
       this.childArray.push(data);
       this.childArraySize = this.childArraySize - 1;
       this.applicantBasicForm.controls['children'].setValue(this.childArray);
       this.childNull();
       this.isChild = false;
+      if(this.childArraySize<=0){
+        this.isAddChild= false;
+      }
     } else {
       this._toastr.error('Please fill Correct Details');
     }
@@ -241,7 +244,7 @@ export class ApplicantDetailsComponent implements OnInit {
   //ApplicantInfo
   applicantFormInfo(applicantData: any) {
     this.formSubmitted = true;
-    if (this.applicantBasicForm.valid && (this.childArray.size == this.childArraySize)) {
+    if (this.applicantBasicForm.valid && (this.childArray.length == this.childCount)) {
       this.applicantData = applicantData;
       this._userService.setValueToModel(this.applicantData).subscribe((res) => {
         this._toastr.success('Data Saved');
