@@ -12,6 +12,9 @@ export class ApplicantDetails{
   public spouseDateOfBirth:any
   public spouseAge:any
 
+  public numberOfChild:any
+  public children:any
+
   public streetAddress: any
   public city: any
   public state: any

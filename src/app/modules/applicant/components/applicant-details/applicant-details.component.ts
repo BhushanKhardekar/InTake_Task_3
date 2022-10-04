@@ -10,11 +10,11 @@ import { constVal } from '../../config/constVal.obj';
   templateUrl: './applicant-details.component.html',
   styleUrls: ['./applicant-details.component.css'],
 })
-
 export class ApplicantDetailsComponent implements OnInit {
   //Variables
   inComingData: any;
   applicantBasicForm: any;
+  applicantChildForm: any;
   applicantAge: any;
   applicantData: any;
   spouseAge: any;
@@ -28,8 +28,11 @@ export class ApplicantDetailsComponent implements OnInit {
   countryCode: any;
   applicantGender: any;
   marriage: any;
+  childArraySize: any;
+  childArray: any = [];
 
   fieldReadOnly = false;
+  applicantChildAge = false;
   currentApplicantAge = false;
   currentSpouseAge = false;
   applicantAdult = false;
@@ -39,6 +42,8 @@ export class ApplicantDetailsComponent implements OnInit {
   invalidApplicantAge = false;
   invalidSpouseAge = false;
   checkBoxGroup = false;
+  isChild = false;
+  isAddChild = false;
 
   countries: any = constVal.countries;
   genders: any = constVal.genders;
@@ -50,7 +55,7 @@ export class ApplicantDetailsComponent implements OnInit {
     private _formbuilder: FormBuilder,
     private _router: Router,
     private _userService: ApplicantService,
-    private _toastr: ToastrService,
+    private _toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -62,10 +67,10 @@ export class ApplicantDetailsComponent implements OnInit {
 
   getDataFromApi() {
     this._userService.getApplicantData().subscribe((res: any) => {
-       let data = res.resultObject;
+      let data = res.resultObject;
       if (res.isSucess) {
         this.inComingData = JSON.parse(data);
-        this._userService.applicant= this.inComingData;
+        this._userService.applicant = this.inComingData;
         this.initApplicantForm();
       }
     });
@@ -73,56 +78,179 @@ export class ApplicantDetailsComponent implements OnInit {
 
   initApplicantForm() {
     this.applicantBasicForm = this._formbuilder.group({
-      fullName: [this._userService.applicant.applicantDetails.fullName, Validators.required],
-      phoneNumber: [this._userService.applicant.applicantDetails.phoneNumber, Validators.required],
-      email: [this._userService.applicant.applicantDetails.email, [Validators.pattern('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'), Validators.required],],
-      gender: [this._userService.applicant.applicantDetails.gender, Validators.required],
-      dateOfBirth: [this._userService.applicant.applicantDetails.dateOfBirth, Validators.required],
+      fullName: [
+        this._userService.applicant.applicantDetails.fullName,
+        Validators.required,
+      ],
+      phoneNumber: [
+        this._userService.applicant.applicantDetails.phoneNumber,
+        Validators.required,
+      ],
+      email: [
+        this._userService.applicant.applicantDetails.email,
+        [
+          Validators.pattern('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$'),
+          Validators.required,
+        ],
+      ],
+      gender: [
+        this._userService.applicant.applicantDetails.gender,
+        Validators.required,
+      ],
+      dateOfBirth: [
+        this._userService.applicant.applicantDetails.dateOfBirth,
+        Validators.required,
+      ],
       age: [''],
-      maritalStatus: [this._userService.applicant.applicantDetails.maritalStatus],
-      spouseFullName: [this._userService.applicant.applicantDetails.spouseFullName],
+      maritalStatus: [
+        this._userService.applicant.applicantDetails.maritalStatus,
+      ],
+      spouseFullName: [
+        this._userService.applicant.applicantDetails.spouseFullName,
+      ],
       spouseGender: [this._userService.applicant.applicantDetails.spouseGender],
-      spouseDateOfBirth: [this._userService.applicant.applicantDetails.spouseDateOfBirth],
+      spouseDateOfBirth: [
+        this._userService.applicant.applicantDetails.spouseDateOfBirth,
+      ],
       spouseAge: [''],
-      streetAddress: [this._userService.applicant.applicantDetails.streetAddress, Validators.required],
-      city: [this._userService.applicant.applicantDetails.city, Validators.required],
-      state: [this._userService.applicant.applicantDetails.state, Validators.required],
-      zipCode: [this._userService.applicant.applicantDetails.zipCode, Validators.required],
-      country: [this._userService.applicant.applicantDetails.country, Validators.required],
+      numberOfChild: [
+        this._userService.applicant.applicantDetails.numberOfChild,
+      ],
+      children: [''],
+      streetAddress: [
+        this._userService.applicant.applicantDetails.streetAddress,
+        Validators.required,
+      ],
+      city: [
+        this._userService.applicant.applicantDetails.city,
+        Validators.required,
+      ],
+      state: [
+        this._userService.applicant.applicantDetails.state,
+        Validators.required,
+      ],
+      zipCode: [
+        this._userService.applicant.applicantDetails.zipCode,
+        Validators.required,
+      ],
+      country: [
+        this._userService.applicant.applicantDetails.country,
+        Validators.required,
+      ],
+    });
+    this.childArray = this._userService.applicant.applicantDetails.children;
+
+    this.applicantChildForm = this._formbuilder.group({
+      childFullName: [''],
+      childGender: [''],
+      childDateOfBirth: [''],
+      childAge: [''],
     });
     this.dataLoad();
   }
 
-  dataLoad(){
+  dataLoad() {
     this.countryCode = this._userService.applicant.applicantDetails.country;
     this.applicantGender = this._userService.applicant.applicantDetails.gender;
     this.applicantAge = this._userService.applicant.applicantDetails.age;
     this.spouseAge = this._userService.applicant.applicantDetails.spouseAge;
     this.marriage = this._userService.applicant.applicantDetails.maritalStatus;
-
     this.onCountryLoad(this.countryCode);
-
     this.onApplicant(this._userService.applicant.applicantDetails.dateOfBirth);
-    this.onSpouse(this._userService.applicant.applicantDetails.spouseDateOfBirth);
+    this.onSpouse(
+      this._userService.applicant.applicantDetails.spouseDateOfBirth
+    );
     this.onMarriage(this._userService.applicant.applicantDetails.maritalStatus);
+    this.childArraySize =
+      this._userService.applicant.applicantDetails.numberOfChild;
   }
+
   get f() {
     return this.applicantBasicForm.controls;
   }
 
+  //ChildInfo
+  onChangeChild(event: any) {
+    this.childArraySize = event.target.value;
+    this.childArray = [];
+    if (this.childArraySize > 0) {
+      this.isAddChild = true;
+      this.applicantChildForm.controls['childFullName'].setValidators(
+        Validators.required
+      );
+      this.applicantChildForm.controls[
+        'childFullName'
+      ].updateValueAndValidity();
+      this.applicantChildForm.controls['childDateOfBirth'].setValidators(
+        Validators.required
+      );
+      this.applicantChildForm.controls[
+        'childDateOfBirth'
+      ].updateValueAndValidity();
+      this.applicantChildForm.controls['childGender'].setValidators(
+        Validators.required
+      );
+      this.applicantChildForm.controls['childGender'].updateValueAndValidity();
+      this.applicantChildForm.controls['childAge'].setValidators(
+        Validators.required
+      );
+      this.applicantChildForm.controls['childAge'].updateValueAndValidity();
+    } else {
+      this.isAddChild = false;
+      this.childNull();
+    }
+  }
+  onAddChild() {
+    this.isChild = true;
+  }
+  editChild(val: any) {
+    console.log(this.childArray[val]);
+    this.isChild = true;
+    this.applicantChildAge= true;
+    this.applicantChildForm.patchValue({
+      childFullName:this.childArray[val].childFullName,
+      childGender:this.childArray[val].childGender,
+      childAge:this.childArray[val].childAge,
+      childDateOfBirth:this.childArray[val].childDateOfBirth
+    });
+    this.childArray.splice(val, 1);
+  }
+  deleteChild(val: any) {
+    this.childArray.splice(val, 1);
+  }
+  onAddChildCancel() {
+    this.isChild = false;
+  }
+  onSaveChild(data: any) {
+    if (
+      this.applicantChildForm.valid ||
+      this.childArray.size == this.childArraySize
+    ) {
+      this.childArray.push(data);
+      this.childArraySize = this.childArraySize - 1;
+      this.applicantBasicForm.controls['children'].setValue(this.childArray);
+      this.childNull();
+      this.isChild=false;
+    } else {
+      this._toastr.error('Please fill Correct Details');
+    }
+  }
+
+
+  //ApplicantInfo
   applicantFormInfo(applicantData: any) {
     this.formSubmitted = true;
-    if (this.applicantBasicForm.valid) {
+    if (this.applicantBasicForm.valid && (this.childArray.size == this.childArraySize)) {
       this.applicantData = applicantData;
       this._userService.setValueToModel(this.applicantData).subscribe((res) => {
-        this._toastr.success("Data Saved");
+        this._toastr.success('Data Saved');
         this._router.navigate(['/applicant/medical-details']);
       });
-    }
-    else {
+    } else {
       this._toastr.error('Fill all details');
     }
   }
+
 
   //Event Functions
   ageCalculatorApplicant(event: any) {
@@ -133,6 +261,25 @@ export class ApplicantDetailsComponent implements OnInit {
   ageCalculatorSpouse(event: any) {
     let age = event.target.value;
     this.onSpouse(age);
+  }
+
+  ageCalculatorChild(event: any) {
+    let age = event.target.value;
+    this.ageCalculator(age);
+  }
+
+  ageCalculator(age: any) {
+    if (age) {
+      if (age > this.minDate && age < this.maxDate) {
+        const convertAge = new Date(age);
+        const timeDiff = Math.abs(Date.now() - convertAge.getTime());
+        let applicantChildAge = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
+        this.applicantChildForm.patchValue({ childAge: applicantChildAge });
+        this.applicantChildAge = true;
+      } else {
+        return;
+      }
+    }
   }
 
   onApplicant(age: any) {
@@ -167,22 +314,40 @@ export class ApplicantDetailsComponent implements OnInit {
     this.onMarriage(this.marriage);
     this.spouseSetNull();
   }
+
   onMarriage(val: any) {
     if (val == 'Married') {
       this.marriedStatus = true;
-      this.applicantBasicForm.controls['spouseFullName'].setValidators([Validators.required]);
-      this.applicantBasicForm.controls['spouseFullName'].updateValueAndValidity();
-      this.applicantBasicForm.controls['spouseGender'].setValidators([Validators.required]);
+      this.applicantBasicForm.controls['spouseFullName'].setValidators([
+        Validators.required,
+      ]);
+      this.applicantBasicForm.controls[
+        'spouseFullName'
+      ].updateValueAndValidity();
+      this.applicantBasicForm.controls['spouseGender'].setValidators([
+        Validators.required,
+      ]);
       this.applicantBasicForm.controls['spouseGender'].updateValueAndValidity();
-      this.applicantBasicForm.controls['spouseDateOfBirth'].setValidators([Validators.required]);
-      this.applicantBasicForm.controls['spouseDateOfBirth'].updateValueAndValidity();
-      this.applicantBasicForm.controls['spouseAge'].setValidators([Validators.required]);
+      this.applicantBasicForm.controls['spouseDateOfBirth'].setValidators([
+        Validators.required,
+      ]);
+      this.applicantBasicForm.controls[
+        'spouseDateOfBirth'
+      ].updateValueAndValidity();
+      this.applicantBasicForm.controls['spouseAge'].setValidators([
+        Validators.required,
+      ]);
       this.applicantBasicForm.controls['spouseAge'].updateValueAndValidity();
+      this.applicantBasicForm.controls['numberOfChild'].setValidators([
+        Validators.required,
+      ]);
+      this.applicantBasicForm.controls[
+        'numberOfChild'
+      ].updateValueAndValidity();
     } else if (val == 'Unmarried') {
       this.marriedStatus = false;
       this.spouseSetNull();
-    }
-    else {
+    } else {
       this.marriedStatus = false;
       this.spouseSetNull();
     }
@@ -191,6 +356,7 @@ export class ApplicantDetailsComponent implements OnInit {
     this.countryCode = event.target.value;
     this.onCountryLoad(this.countryCode);
   }
+
   onCountryLoad(val: any) {
     this.countryCode = val;
     if (this.countryCode == 'US') {
@@ -211,8 +377,7 @@ export class ApplicantDetailsComponent implements OnInit {
       let patt = /^([0-9])$/;
       let result = patt.test(event.key);
       return result;
-    }
-    else {
+    } else {
       return;
     }
   }
@@ -226,9 +391,9 @@ export class ApplicantDetailsComponent implements OnInit {
   onGengerChnage(event: any) {
     this.applicantGender = event.target.value;
     this.marriedStatus = false;
-    this.applicantBasicForm.controls["dateOfBirth"].setValue(null);
-    this.applicantBasicForm.controls["age"].setValue(null);
-    this.applicantBasicForm.controls["maritalStatus"].setValue(null);
+    this.applicantBasicForm.controls['dateOfBirth'].setValue(null);
+    this.applicantBasicForm.controls['age'].setValue(null);
+    this.applicantBasicForm.controls['maritalStatus'].setValue(null);
     this.spouseSetNull();
     this.isAdult();
   }
@@ -237,27 +402,66 @@ export class ApplicantDetailsComponent implements OnInit {
   isAdult() {
     if (this.applicantAge >= 21 && this.applicantGender == 'Male') {
       this.applicantAdult = true;
-      this.applicantBasicForm.controls['maritalStatus'].setValidators([Validators.required]);
-      this.applicantBasicForm.controls['maritalStatus'].updateValueAndValidity();
+      this.applicantBasicForm.controls['maritalStatus'].setValidators([
+        Validators.required,
+      ]);
+      this.applicantBasicForm.controls[
+        'maritalStatus'
+      ].updateValueAndValidity();
     } else if (this.applicantAge >= 18 && this.applicantGender == 'Female') {
       this.applicantAdult = true;
-      this.applicantBasicForm.controls['maritalStatus'].setValidators([Validators.required]);
-      this.applicantBasicForm.controls['maritalStatus'].updateValueAndValidity();
+      this.applicantBasicForm.controls['maritalStatus'].setValidators([
+        Validators.required,
+      ]);
+      this.applicantBasicForm.controls[
+        'maritalStatus'
+      ].updateValueAndValidity();
     } else {
       this.applicantAdult = false;
-      this.applicantBasicForm.controls['maritalStatus'].setValidators([Validators.nullValidator]);
-      this.applicantBasicForm.controls['maritalStatus'].updateValueAndValidity();
+      this.applicantBasicForm.controls['maritalStatus'].setValidators([
+        Validators.nullValidator,
+      ]);
+      this.applicantBasicForm.controls[
+        'maritalStatus'
+      ].updateValueAndValidity();
     }
   }
 
   spouseSetNull() {
     this.applicantBasicForm.controls['spouseFullName'].setValue(null);
-    this.applicantBasicForm.controls['spouseFullName'].setValidators([Validators.nullValidator]);
+    this.applicantBasicForm.controls['spouseFullName'].setValidators([
+      Validators.nullValidator,
+    ]);
     this.applicantBasicForm.controls['spouseGender'].setValue(null);
-    this.applicantBasicForm.controls['spouseGender'].setValidators([Validators.nullValidator]);
+    this.applicantBasicForm.controls['spouseGender'].setValidators([
+      Validators.nullValidator,
+    ]);
     this.applicantBasicForm.controls['spouseDateOfBirth'].setValue(null);
-    this.applicantBasicForm.controls['spouseDateOfBirth'].setValidators([Validators.nullValidator]);
+    this.applicantBasicForm.controls['spouseDateOfBirth'].setValidators([
+      Validators.nullValidator,
+    ]);
     this.applicantBasicForm.controls['spouseAge'].setValue(null);
-    this.applicantBasicForm.controls['spouseAge'].setValidators([Validators.nullValidator]);
+    this.applicantBasicForm.controls['spouseAge'].setValidators([
+      Validators.nullValidator,
+    ]);
+  }
+
+  childNull() {
+    this.applicantChildForm.controls['childFullName'].setValue(null);
+    this.applicantChildForm.controls['childFullName'].setValidators([
+      Validators.nullValidator,
+    ]);
+    this.applicantChildForm.controls['childGender'].setValue(null);
+    this.applicantChildForm.controls['childGender'].setValidators([
+      Validators.nullValidator,
+    ]);
+    this.applicantChildForm.controls['childAge'].setValue(null);
+    this.applicantChildForm.controls['childAge'].setValidators([
+      Validators.nullValidator,
+    ]);
+    this.applicantChildForm.controls['childDateOfBirth'].setValue(null);
+    this.applicantChildForm.controls['childDateOfBirth'].setValidators([
+      Validators.nullValidator,
+    ]);
   }
 }
