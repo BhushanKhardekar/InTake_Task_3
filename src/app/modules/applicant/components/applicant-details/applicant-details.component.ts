@@ -31,6 +31,7 @@ export class ApplicantDetailsComponent implements OnInit {
   childArraySize: any;
   childCount: any;
   childArray: any = [];
+  tempVal: any;
 
   fieldReadOnly = false;
   applicantChildAge = false;
@@ -170,13 +171,18 @@ export class ApplicantDetailsComponent implements OnInit {
   get f() {
     return this.applicantBasicForm.controls;
   }
+  get fchild() {
+    return this.applicantChildForm.controls;
+  }
 
   //ChildInfo
   onChangeChild(event: any) {
     this.childArraySize = event.target.value;
     this.childCount = event.target.value;
-    this.childArray = [];
-    if (this.childArraySize > 0) {
+    if (this.childArraySize == 0) {
+      this.childArray = [];
+    }
+    else if (this.childArraySize > 0) {
       this.isAddChild = true;
       this.applicantChildForm.controls['childFullName'].setValidators(
         Validators.required
@@ -198,17 +204,23 @@ export class ApplicantDetailsComponent implements OnInit {
         Validators.required
       );
       this.applicantChildForm.controls['childAge'].updateValueAndValidity();
-    } else {
+    }
+    else {
       this.isAddChild = false;
       this.isChild = false;
       this.childNull();
     }
+    if((this.childArray==this.childCount)){
+      this.isAddChild = false;
+    }
   }
+
   onAddChild() {
     this.isChild = true;
   }
+
   editChild(val: any) {
-    console.log(this.childArray[val]);
+    this.tempVal = val;
     this.isChild = true;
     this.applicantChildAge = true;
     this.applicantChildForm.patchValue({
@@ -217,14 +229,16 @@ export class ApplicantDetailsComponent implements OnInit {
       childAge: this.childArray[val].childAge,
       childDateOfBirth: this.childArray[val].childDateOfBirth
     });
-    this.childArray.splice(val, 1);
   }
+
   deleteChild(val: any) {
     this.childArray.splice(val, 1);
   }
+
   onAddChildCancel() {
     this.isChild = false;
   }
+
   onSaveChild(data: any) {
     if (this.applicantChildForm.valid) {
       this.childArray.push(data);
@@ -232,14 +246,24 @@ export class ApplicantDetailsComponent implements OnInit {
       this.applicantBasicForm.controls['children'].setValue(this.childArray);
       this.childNull();
       this.isChild = false;
-      if(this.childArraySize<=0){
-        this.isAddChild= false;
+      if (this.childArraySize <= 0 && (this.childArray==this.childCount)) {
+        this.isAddChild = false;
       }
     } else {
-      this._toastr.error('Please fill Correct Details');
+      this._toastr.error('Please fill Correct Details for child');
     }
   }
 
+  onUpdateChild(data: any) {
+    let obj = {
+      childFullName: this.applicantChildForm.value.childFullName,
+      childGender: this.applicantChildForm.value.childGender,
+      childAge: this.applicantChildForm.value.childAge,
+      childDateOfBirth: this.applicantChildForm.value.childDateOfBirth
+    }
+    console.log(obj)
+    this.childArray[this.tempVal] = obj;
+  }
 
   //ApplicantInfo
   applicantFormInfo(applicantData: any) {
@@ -251,10 +275,9 @@ export class ApplicantDetailsComponent implements OnInit {
         this._router.navigate(['/applicant/medical-details']);
       });
     } else {
-      this._toastr.error('Fill all details');
+      this._toastr.error('Fill check all details');
     }
   }
-
 
   //Event Functions
   ageCalculatorApplicant(event: any) {

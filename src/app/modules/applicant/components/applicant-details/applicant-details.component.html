@@ -153,6 +153,10 @@
             <div class="col-6">
               <label for="childFullName" class="form-label">Full Name</label>
               <input type="text" class="form-control" formControlName="childFullName" placeholder="Mark David" />
+              <span style="color: red" *ngIf="
+              (fchild.childFullName && fchild.childFullName.invalid && fchild.childFullName.touched) ||
+              (fchild.childFullName && fchild.childFullName.invalid && formSubmitted)">
+                Required</span>
             </div>
             <div class="col-6">
               <label for="childGender" class="form-label">Gender</label>
@@ -162,11 +166,19 @@
                   {{ gender.value }}
                 </option>
               </select>
+              <span style="color: red" *ngIf="
+            (fchild.childGender && fchild.childGender.invalid && fchild.childGender.touched) ||
+            (fchild.childGender && fchild.childGender.invalid && formSubmitted)">
+                Required</span>
             </div>
             <div class="col-6">
               <label for="childDateOfBirth" class="form-label">DateOfBirth</label>
               <input type="date" class="form-control" formControlName="childDateOfBirth"
                 (change)="ageCalculatorChild($event)" required />
+              <span style="color: red" *ngIf="
+            (fchild.childDateOfBirth && fchild.childDateOfBirth.invalid && fchild.childDateOfBirth.touched) ||
+            (fchild.childDateOfBirth && fchild.childDateOfBirth.invalid && formSubmitted)">
+                Required</span>
             </div>
             <div class="col-6" *ngIf="this.applicantChildAge">
               <label for="childAge" class="form-label">Age</label>
@@ -180,6 +192,11 @@
             <span class="px-1"><button type="buttton" (click)="onSaveChild(applicantChildFormData.value)"
                 class="btn btn-outline-success">
                 Save
+              </button></span>
+
+            <span class="px-1"><button type="buttton" (click)="onUpdateChild(applicantChildFormData.value)"
+                class="btn btn-outline-success">
+                Update
               </button></span>
           </div>
         </form>
