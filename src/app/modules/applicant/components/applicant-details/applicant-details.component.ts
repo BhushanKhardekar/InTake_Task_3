@@ -30,15 +30,16 @@ export class ApplicantDetailsComponent implements OnInit {
   marriage: any;
   childArraySize: any;
   childCount: any;
-  childArray: any = [];
   tempVal: any;
+  childArray: any = [];
+  tempChildArray: any = [];
 
+  childSubmitted = false;
   fieldReadOnly = false;
   applicantChildAge = false;
   currentApplicantAge = false;
   currentSpouseAge = false;
   applicantAdult = false;
-  isDisabled = true;
   marriedStatus = false;
   formSubmitted = false;
   invalidApplicantAge = false;
@@ -46,6 +47,9 @@ export class ApplicantDetailsComponent implements OnInit {
   checkBoxGroup = false;
   isChild = false;
   isAddChild = false;
+  updateButton = false;
+  isDisabled = true;
+  saveButton = true;
 
   countries: any = constVal.countries;
   genders: any = constVal.genders;
@@ -166,6 +170,7 @@ export class ApplicantDetailsComponent implements OnInit {
     this.childArraySize = this._userService.applicant.applicantDetails.numberOfChild;
     this.childCount = this._userService.applicant.applicantDetails.numberOfChild;
     this.childArray = this._userService.applicant.applicantDetails.children;
+    this.tempChildArray = this.childArray;
   }
 
   get f() {
@@ -177,52 +182,53 @@ export class ApplicantDetailsComponent implements OnInit {
 
   //ChildInfo
   onChangeChild(event: any) {
+
+    //Temp Varialble
+    let tempSize = this.tempChildArray.length;
+
+    //incoming data from form
     this.childArraySize = event.target.value;
     this.childCount = event.target.value;
+
     if (this.childArraySize == 0) {
       this.childArray = [];
+      this.isAddChild = false;
+      this.isChild = false;
+      this.childNull();
     }
-    else if (this.childArraySize > 0) {
+    else if (this.childArraySize > this.childArray.length) {
       this.isAddChild = true;
-      this.applicantChildForm.controls['childFullName'].setValidators(
-        Validators.required
-      );
-      this.applicantChildForm.controls[
-        'childFullName'
-      ].updateValueAndValidity();
-      this.applicantChildForm.controls['childDateOfBirth'].setValidators(
-        Validators.required
-      );
-      this.applicantChildForm.controls[
-        'childDateOfBirth'
-      ].updateValueAndValidity();
-      this.applicantChildForm.controls['childGender'].setValidators(
-        Validators.required
-      );
-      this.applicantChildForm.controls['childGender'].updateValueAndValidity();
-      this.applicantChildForm.controls['childAge'].setValidators(
-        Validators.required
-      );
-      this.applicantChildForm.controls['childAge'].updateValueAndValidity();
+      this.childMandatory();
     }
     else {
       this.isAddChild = false;
       this.isChild = false;
       this.childNull();
     }
-    if((this.childArray==this.childCount)){
+    if ((this.childArray == this.childCount)) {
       this.isAddChild = false;
+    }
+    if (this.childArray.length < this.childArraySize) {
+      let sum = this.childArraySize - this.childArray.length
+      this._toastr.error('Please add ' + sum + ' more child details');
+    }
+    else if (this.childArray.length > this.childArraySize) {
+      let sum = this.childArray.length - this.childArraySize
+      this._toastr.error('Please remove ' + sum + ' child details');
     }
   }
 
   onAddChild() {
     this.isChild = true;
+    this.saveButton = true;
   }
 
   editChild(val: any) {
     this.tempVal = val;
     this.isChild = true;
     this.applicantChildAge = true;
+    this.updateButton = true;
+    this.saveButton = false;
     this.applicantChildForm.patchValue({
       childFullName: this.childArray[val].childFullName,
       childGender: this.childArray[val].childGender,
@@ -233,6 +239,12 @@ export class ApplicantDetailsComponent implements OnInit {
 
   deleteChild(val: any) {
     this.childArray.splice(val, 1);
+    if (this.childArraySize > this.childArray.length) {
+      this.isAddChild = true
+    }
+    else {
+      this.isAddChild = false;
+    }
   }
 
   onAddChildCancel() {
@@ -240,13 +252,14 @@ export class ApplicantDetailsComponent implements OnInit {
   }
 
   onSaveChild(data: any) {
+    this.childSubmitted = true;
     if (this.applicantChildForm.valid) {
       this.childArray.push(data);
       this.childArraySize = this.childArraySize - 1;
       this.applicantBasicForm.controls['children'].setValue(this.childArray);
       this.childNull();
       this.isChild = false;
-      if (this.childArraySize <= 0 && (this.childArray==this.childCount)) {
+      if (this.childArraySize <= 0 && (this.childArray == this.childCount)) {
         this.isAddChild = false;
       }
     } else {
@@ -263,6 +276,8 @@ export class ApplicantDetailsComponent implements OnInit {
     }
     console.log(obj)
     this.childArray[this.tempVal] = obj;
+    this.isChild = false;
+    this.childNull();
   }
 
   //ApplicantInfo
@@ -274,7 +289,16 @@ export class ApplicantDetailsComponent implements OnInit {
         this._toastr.success('Data Saved');
         this._router.navigate(['/applicant/medical-details']);
       });
-    } else {
+    }
+    else if (this.childArray.length < this.childArraySize) {
+      let sval = this.childArraySize - this.childArray.length
+      this._toastr.error('Please add ' + sval + ' more child details');
+    }
+    else if (this.childArray.length > this.childArraySize) {
+      let sval = this.childArray.length - this.childArraySize
+      this._toastr.error('Please remove ' + sval + ' child details');
+    }
+    else {
       this._toastr.error('Fill check all details');
     }
   }
@@ -379,6 +403,7 @@ export class ApplicantDetailsComponent implements OnInit {
       this.spouseSetNull();
     }
   }
+
   onCountry(event: any) {
     this.countryCode = event.target.value;
     this.onCountryLoad(this.countryCode);
@@ -490,5 +515,16 @@ export class ApplicantDetailsComponent implements OnInit {
     this.applicantChildForm.controls['childDateOfBirth'].setValidators([
       Validators.nullValidator,
     ]);
+  }
+  childMandatory() {
+    this.applicantChildForm.controls['childFullName'].setValidators([Validators.required]);
+    this.applicantChildForm.controls['childFullName'].updateValueAndValidity();
+    this.applicantChildForm.controls['childGender'].setValidators([Validators.required]);
+    this.applicantChildForm.controls['childGender'].updateValueAndValidity();
+    this.applicantChildForm.controls['childAge'].setValidators([Validators.required]);
+    this.applicantChildForm.controls['childAge'].updateValueAndValidity();
+    this.applicantChildForm.controls['childDateOfBirth'].setValidators([Validators.required]);
+    this.applicantChildForm.controls['childDateOfBirth'].updateValueAndValidity();
+
   }
 }

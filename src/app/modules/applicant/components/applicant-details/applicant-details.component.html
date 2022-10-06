@@ -189,12 +189,12 @@
             <span class="px-1"><button class="btn btn-outline-danger" (click)="onAddChildCancel()">
                 Cancel
               </button></span>
-            <span class="px-1"><button type="buttton" (click)="onSaveChild(applicantChildFormData.value)"
+            <span *ngIf="saveButton" class="px-1"><button type="buttton" (click)="onSaveChild(applicantChildFormData.value)"
                 class="btn btn-outline-success">
                 Save
               </button></span>
 
-            <span class="px-1"><button type="buttton" (click)="onUpdateChild(applicantChildFormData.value)"
+            <span *ngIf="updateButton" class="px-1"><button type="buttton" (click)="onUpdateChild(applicantChildFormData.value)"
                 class="btn btn-outline-success">
                 Update
               </button></span>
